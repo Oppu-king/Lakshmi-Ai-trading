@@ -1,19 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import random, csv, os, requests
-from dotenv import load_dotenv
-from pathlib import Path
-
-# Load environment variables safely
-env_path = Path(__file__).parent / ".env"
-load_dotenv(dotenv_path=env_path)
+import os, random, csv, requests
 
 app = Flask(__name__)
-app.secret_key = "lakshmi_secret_key"
+app.secret_key = os.getenv("FLASK_SECRET", "lakshmi_secret_key")  # Use FLASK_SECRET from Render or fallback
+
 app.config['UPLOAD_FOLDER'] = 'static/voice_notes'
 
 OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY")
-print("🔑 OPENROUTER_KEY:", OPENROUTER_KEY)  # ✅ Should now print the key
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+if not OPENROUTER_KEY:
+    raise ValueError("OPENROUTER_API_KEY not set! Please add it to Render environment variables.")
 
 # --- Global Variables ---
 mode = "wife"
