@@ -1,7 +1,6 @@
 services:
   - type: web
     name: lakshmi-ai-wife
-    env: docker
-    plan: free
-    branch: main
-    dockerfilePath: ./Dockerfile
+    env: python
+    buildCommand: pip install --upgrade pip setuptools && pip install -r requirements.txt
+    startCommand: gunicorn app:app
