@@ -1,7 +1,6 @@
-setuptools>=67.0.0
-wheel
+--use-pep517=False
 Flask==2.3.2
 gunicorn==21.2.0
-pandas==2.1.0
 numpy==1.24.4
+pandas==2.1.0
 nltk==3.8.1
