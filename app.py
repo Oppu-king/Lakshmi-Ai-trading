@@ -167,13 +167,58 @@ def download_strategies():
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
-        data = request.get_json(force=True)  # Expects JSON
-        user_msg = data.get("message", "")
-        ...
-        return jsonify({"reply": reply})
+        if request.is_json:
+            user_msg = request.json.get("message")
+        else:
+            user_msg = request.form.get("message")
+
+        if not user_msg:
+            return jsonify({"reply": "❌ No message received."})
+
+        # Optional: Mood prompt prefix
+        mood_prompts = {
+            "romantic": "You're feeling romantic and loving.",
+            "angry": "You're in an annoyed and sharp mood.",
+            "happy": "You're cheerful and enthusiastic.",
+            "sad": "You're in a soft, comforting, emotional tone.",
+            "sexual": "You're seductive, deep, and sensual.",
+            "professional": "You're formal, wise, and factual.",
+        }
+
+        mood = current_mood if current_mood else "normal"
+        mood_prompt = mood_prompts.get(mood, "")
+
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_KEY}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://lakshmi-ai-wife.local",
+            "X-Title": "Lakshmi AI Wife"
+        }
+
+        data = {
+            "model": "meta-llama/llama-3-8b-instruct",
+            "messages": [
+                {"role": "system", "content": f"You are Lakshmi, a deeply personal AI Wife. {mood_prompt}"},
+                {"role": "user", "content": user_msg}
+            ],
+            "max_tokens": 500,
+            "temperature": 0.8
+        }
+
+        response = requests.post(OPENROUTER_URL, headers=headers, json=data)
+        print("🌐 Status:", response.status_code)
+        print("📦 Body:", response.text)
+
+        if response.status_code == 200:
+            reply = response.json()["choices"][0]["message"]["content"]
+        else:
+            reply = f"❌ Lakshmi couldn't respond. Error: {response.status_code} - {response.text}"
+
     except Exception as e:
-        return jsonify({"reply": f"❌ Exception: {str(e)}"})
-    
+        reply = f"❌ Exception: {str(e)}"
+
+    return jsonify({"reply": reply})
+
 # -------------- NEW ULTRA-BACKTESTER ROUTES ------------------
 @app.route("/backtester-api", methods=["POST"])
 def backtester_api():
