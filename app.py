@@ -167,7 +167,11 @@ def download_strategies():
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
-        data = request.get_json(force=True)
+        if request.is_json:
+            data = request.get_json()
+        else:
+            return jsonify({"reply": "❌ Error: Content-Type must be application/json"}), 415
+
         user_msg = data.get("message", "")
 
         mood_prompts = {
