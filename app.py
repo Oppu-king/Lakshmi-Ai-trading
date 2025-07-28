@@ -163,18 +163,13 @@ def get_strategies():
 @app.route("/download_strategies")
 def download_strategies():
     return send_file("strategies.csv", as_attachment=True)
-
+    
 @app.route("/chat", methods=["POST"])
 def chat():
-    try:
-        if request.is_json:
-            user_msg = request.json.get("message")
-        else:
-            user_msg = request.form.get("message")
-
-        if not user_msg:
-            return jsonify({"reply": "❌ No message received."})
-
+    data = request.get_json()
+    user_message = data.get("message", "")
+    lakshmi_reply = generate_lakshmi_reply(user_message)  # Your response logic
+    return jsonify({"reply": lakshmi_reply})
         # Optional: Mood prompt prefix
         mood_prompts = {
             "romantic": "You're feeling romantic and loving.",
