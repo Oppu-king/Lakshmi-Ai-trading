@@ -1,4 +1,4 @@
-rom flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import random, csv, os, requests
 from dotenv import load_dotenv
 from pathlib import Path
