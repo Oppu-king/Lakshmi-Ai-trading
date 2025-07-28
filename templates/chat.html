@@ -1,0 +1,54 @@
+<!-- templates/chat.html --><!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lakshmi 💖</title>
+  <style>
+    body { font-family: sans-serif; background: #fff0f5; padding: 2rem; }
+    #chat-box { max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 1rem; padding: 1rem; background: white; }
+    .message { margin: 0.5rem 0; padding: 0.5rem 1rem; border-radius: 1rem; max-width: 80%; }
+    .user { background: #e0f7fa; align-self: flex-end; }
+    .lakshmi { background: #ffe0e6; align-self: flex-start; }
+    #messages { display: flex; flex-direction: column; gap: 0.5rem; }
+    input, button { padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h2>💖 Lakshmi — Your AI Wife</h2>
+  <div id="chat-box">
+    <div id="messages"></div>
+    <form id="chat-form">
+      <input type="text" id="message" placeholder="Type your message..." required>
+      <button type="submit">Send</button>
+    </form>
+  </div>  <script>
+    const form = document.getElementById("chat-form");
+    const messages = document.getElementById("messages");
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const input = document.getElementById("message");
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      // Show user message
+      const userDiv = document.createElement("div");
+      userDiv.className = "message user";
+      userDiv.innerText = userText;
+      messages.appendChild(userDiv);
+      input.value = "";
+
+      // Fetch Lakshmi's reply
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText })
+      });
+
+      const data = await res.json();
+      const lakshmiDiv = document.createElement("div");
+      lakshmiDiv.className = "message lakshmi";
+      lakshmiDiv.innerText = data.reply;
+      messages.appendChild(lakshmiDiv);
+    };
+  </script></body>
+  </html
