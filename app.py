@@ -167,10 +167,8 @@ def download_strategies():
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
-        if request.is_json:
-            data = request.get_json()
-        else:
-            return jsonify({"reply": "❌ Error: Content-Type must be application/json"}), 415
+        # Works even if Content-Type header is missing or wrong
+        data = request.get_json(force=True)
 
         user_msg = data.get("message", "")
 
@@ -180,7 +178,7 @@ def chat():
             "happy": "You're cheerful and enthusiastic.",
             "sad": "You're in a soft, comforting, emotional tone.",
             "sexual": "You're seductive, deep, and sensual.",
-            "professional": "You're formal, wise, and factual.",
+            "professional": "You're formal, wise, and factual",
         }
 
         mood = current_mood if current_mood else "normal"
