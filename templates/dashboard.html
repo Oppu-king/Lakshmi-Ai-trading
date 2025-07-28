@@ -70,15 +70,53 @@
       <button class="tool-button" onclick="showTool('matrix')">📊 Multi-Strategy Matrix</button>
       <button class="tool-button" onclick="showTool('askai')">🤖 Ask AI Assistant</button>
     </div><div id="chat" class="tool-section">
+  </div><div id="chat" class="tool-section">
   <h2>💬 Lakshmi Romantic Chat</h2>
   <form id="chat-form">
     <input type="text" id="user-input" placeholder="Talk to Lakshmi..." required>
     <button class="submit-btn" type="submit">Send</button>
   </form>
-  <div id="chat-box" style="margin-top:15px;"></div>
-</div>
+  <div id="chat-box" style="margin-top:15px; max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;"></div>
+</div><style>
+  .user, .lakshmi {
+    margin-bottom: 10px;
+  }
+  .user {
+    text-align: right;
+    color: #333;
+  }
+  .lakshmi {
+    text-align: left;
+    color: #a0522d;
+  }
+</style><script>
+  const chatBox = document.getElementById("chat-box");
+  const form = document.getElementById("chat-form");
+  const userInput = document.getElementById("user-input");
 
-<div id="strategy" class="tool-section">
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    // Show user message
+    chatBox.innerHTML += `<div class='user'><strong>You:</strong> ${message}</div>`;
+    userInput.value = "";
+
+    // Fetch Lakshmi’s reply
+    const response = await fetch("/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: message })
+    });
+
+    const data = await response.json();
+    chatBox.innerHTML += `<div class='lakshmi'><strong>Lakshmi:</strong> ${data.reply}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+</script>
   <h2>📘 Strategy Builder</h2>
   <form method="POST" action="/add_strategy">
     <input type="text" name="name" placeholder="Strategy Name" required>
