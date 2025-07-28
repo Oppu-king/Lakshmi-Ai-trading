@@ -1,16 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import os, random, csv, requests
+rom flask import Flask, render_template, request, redirect, url_for, session, jsonify
+import random, csv, os, requests
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load environment variables safely
+env_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET", "lakshmi_secret_key")  # Use FLASK_SECRET from Render or fallback
-
+app.secret_key = "lakshmi_secret_key"
 app.config['UPLOAD_FOLDER'] = 'static/voice_notes'
 
 OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY")
+print("🔑 OPENROUTER_KEY:", OPENROUTER_KEY)  # ✅ Should now print the key
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-
-if not OPENROUTER_KEY:
-    raise ValueError("OPENROUTER_API_KEY not set! Please add it to Render environment variables.")
 
 # --- Global Variables ---
 mode = "wife"
@@ -574,9 +577,7 @@ def analyze_with_neuron(price):
             "target": 0
         }
 # --- Start App ---
-if __name__ == "__main__":
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    print("💖 Lakshmi — Your AI Wife is running at:")
-    print("➡️  Localhost:  http://127.0.0.1:5000")
-    print("➡️  Network IP: http://<your-IP>:5000")
-    app.run(host="0.0.0.0", port=5000, debug=False)
+import os
+
+api_key = os.environ.get("OPENROUTER_API_KEY")
+ 
