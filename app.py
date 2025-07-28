@@ -166,11 +166,11 @@ def download_strategies():
     
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
-    user_message = data.get("message", "")
-    lakshmi_reply = generate_lakshmi_reply(user_message)  # Your response logic
-    return jsonify({"reply": lakshmi_reply})
-        # Optional: Mood prompt prefix
+    try:
+        data = request.get_json()
+        user_msg = data.get("message", "")
+
+        # Mood prompt setup
         mood_prompts = {
             "romantic": "You're feeling romantic and loving.",
             "angry": "You're in an annoyed and sharp mood.",
@@ -190,7 +190,7 @@ def chat():
             "X-Title": "Lakshmi AI Wife"
         }
 
-        data = {
+        payload = {
             "model": "meta-llama/llama-3-8b-instruct",
             "messages": [
                 {"role": "system", "content": f"You are Lakshmi, a deeply personal AI Wife. {mood_prompt}"},
@@ -200,7 +200,7 @@ def chat():
             "temperature": 0.8
         }
 
-        response = requests.post(OPENROUTER_URL, headers=headers, json=data)
+        response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
         print("🌐 Status:", response.status_code)
         print("📦 Body:", response.text)
 
@@ -213,25 +213,7 @@ def chat():
         reply = f"❌ Exception: {str(e)}"
 
     return jsonify({"reply": reply})
-
-@app.route("/set_mood", methods=["POST"])
-def set_mood():
-    global current_mood
-    try:
-        if request.is_json:
-            mood = request.json.get("mood", "default")
-        else:
-            mood = request.form.get("mood", "default")
-
-        if mood not in ["default", "happy", "sad", "romantic", "angry", "sexy"]:
-            return jsonify({"status": "error", "message": "❌ Invalid mood selected."})
-
-        current_mood = mood
-        return jsonify({"status": "success", "message": f"✅ Mood changed to '{mood}'."})
-
-    except Exception as e:
-        return jsonify({"status": "error", "message": f"❌ Exception: {str(e)}"})
-
+    
 # -------------- NEW ULTRA-BACKTESTER ROUTES ------------------
 @app.route("/backtester-api", methods=["POST"])
 def backtester_api():
