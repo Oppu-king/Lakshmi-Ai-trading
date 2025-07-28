@@ -167,9 +167,9 @@ def download_strategies():
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
-        data = request.get_json(force=True)  # Force ensures JSON is parsed
+        data = request.get_json(force=True)
         user_msg = data.get("message", "")
-        
+
         mood_prompts = {
             "romantic": "You're feeling romantic and loving.",
             "angry": "You're in an annoyed and sharp mood.",
@@ -200,8 +200,6 @@ def chat():
         }
 
         response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
-        print("🌐 Status:", response.status_code)
-        print("📦 Body:", response.text)
 
         if response.status_code == 200:
             reply = response.json()["choices"][0]["message"]["content"]
