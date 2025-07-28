@@ -166,11 +166,11 @@ def download_strategies():
     
 @app.route("/chat", methods=["POST"])
 def chat():
+    global current_mood
     try:
         data = request.get_json()
         user_msg = data.get("message", "")
 
-        # Mood prompt setup
         mood_prompts = {
             "romantic": "You're feeling romantic and loving.",
             "angry": "You're in an annoyed and sharp mood.",
@@ -201,6 +201,7 @@ def chat():
         }
 
         response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
+
         print("🌐 Status:", response.status_code)
         print("📦 Body:", response.text)
 
@@ -212,7 +213,7 @@ def chat():
     except Exception as e:
         reply = f"❌ Exception: {str(e)}"
 
-    return jsonify({"reply": reply})
+    return jsonify({"reply": reply, "mood": mood})
     
 # -------------- NEW ULTRA-BACKTESTER ROUTES ------------------
 @app.route("/backtester-api", methods=["POST"])
