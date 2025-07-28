@@ -6,19 +6,27 @@ const moodDisplay = document.getElementById("mood");
 // --- Chat Logic ---
 chatForm.onsubmit = function (e) {
   e.preventDefault();
-  const msg = userInput.value;
+  const msg = userInput.value.trim();
+  if (!msg) return;
+
   chatBox.innerHTML += `<p><strong>You:</strong> ${msg}</p>`;
   userInput.value = "";
 
   fetch("/chat", {
     method: "POST",
-    body: new URLSearchParams({ message: msg })
+    headers: {
+      "Content-Type": "application/json"   // ✅ Proper JSON header
+    },
+    body: JSON.stringify({ message: msg })  // ✅ Send as JSON
   })
     .then(res => res.json())
     .then(data => {
       chatBox.innerHTML += `<p><strong>Lakshmi:</strong> ${data.reply}</p>`;
-      moodDisplay.textContent = data.mood;
+      if (data.mood) moodDisplay.textContent = data.mood;
       chatBox.scrollTop = chatBox.scrollHeight;
+    })
+    .catch(err => {
+      chatBox.innerHTML += `<p><strong>Lakshmi:</strong> ❌ Error: ${err}</p>`;
     });
 };
 
