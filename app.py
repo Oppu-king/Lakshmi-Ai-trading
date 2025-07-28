@@ -167,51 +167,12 @@ def download_strategies():
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
-        # Works even if Content-Type header is missing or wrong
-        data = request.get_json(force=True)
-
+        data = request.get_json(force=True)  # Expects JSON
         user_msg = data.get("message", "")
-
-        mood_prompts = {
-            "romantic": "You're feeling romantic and loving.",
-            "angry": "You're in an annoyed and sharp mood.",
-            "happy": "You're cheerful and enthusiastic.",
-            "sad": "You're in a soft, comforting, emotional tone.",
-            "sexual": "You're seductive, deep, and sensual.",
-            "professional": "You're formal, wise, and factual",
-        }
-
-        mood = current_mood if current_mood else "normal"
-        mood_prompt = mood_prompts.get(mood, "")
-
-        headers = {
-            "Authorization": f"Bearer {OPENROUTER_KEY}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://lakshmi-ai-wife.local",
-            "X-Title": "Lakshmi AI Wife"
-        }
-
-        payload = {
-            "model": "meta-llama/llama-3-8b-instruct",
-            "messages": [
-                {"role": "system", "content": f"You are Lakshmi, a deeply personal AI Wife. {mood_prompt}"},
-                {"role": "user", "content": user_msg}
-            ],
-            "max_tokens": 500,
-            "temperature": 0.8
-        }
-
-        response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
-
-        if response.status_code == 200:
-            reply = response.json()["choices"][0]["message"]["content"]
-        else:
-            reply = f"❌ Lakshmi couldn't respond. Error: {response.status_code} - {response.text}"
-
+        ...
+        return jsonify({"reply": reply})
     except Exception as e:
-        reply = f"❌ Exception: {str(e)}"
-
-    return jsonify({"reply": reply})
+        return jsonify({"reply": f"❌ Exception: {str(e)}"})
     
 # -------------- NEW ULTRA-BACKTESTER ROUTES ------------------
 @app.route("/backtester-api", methods=["POST"])
