@@ -15,15 +15,23 @@ chatForm.onsubmit = function (e) {
   fetch("/chat", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"   // ✅ Proper JSON header
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify({ message: msg })  // ✅ Send as JSON
+    body: JSON.stringify({ message: msg })
   })
     .then(res => res.json())
     .then(data => {
-      chatBox.innerHTML += `<p><strong>Lakshmi:</strong> ${data.reply}</p>`;
-      if (data.mood) moodDisplay.textContent = data.mood;
+      // Simulate typing
+      const typingMsg = document.createElement("p");
+      typingMsg.innerHTML = `<strong>Lakshmi:</strong> <em>typing...</em>`;
+      chatBox.appendChild(typingMsg);
       chatBox.scrollTop = chatBox.scrollHeight;
+
+      setTimeout(() => {
+        typingMsg.innerHTML = `<strong>Lakshmi:</strong> ${data.reply}`;
+        if (data.mood) moodDisplay.textContent = data.mood;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 1500); // ⏳ Delay of 1.5s
     })
     .catch(err => {
       chatBox.innerHTML += `<p><strong>Lakshmi:</strong> ❌ Error: ${err}</p>`;
@@ -140,7 +148,7 @@ function updatePrice() {
     });
 }
 
-// --- Trade Analyzer (Phase 13) ---
+// --- Trade Analyzer ---
 document.getElementById("analyzer-form").onsubmit = function (e) {
   e.preventDefault();
   fetch("/analyze_strategy", {
@@ -157,7 +165,7 @@ document.getElementById("analyzer-form").onsubmit = function (e) {
     });
 };
 
-// Initial Load
+// --- Initial Load ---
 setInterval(updatePrice, 5000);
 updatePrice();
 loadVoiceList()
