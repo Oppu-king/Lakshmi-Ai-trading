@@ -1,54 +1,98 @@
-<!-- templates/chat.html --><!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Lakshmi 💖</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lakshmi AI 💖</title>
   <style>
-    body { font-family: sans-serif; background: #fff0f5; padding: 2rem; }
-    #chat-box { max-width: 600px; margin: auto; border: 1px solid #ccc; border-radius: 1rem; padding: 1rem; background: white; }
-    .message { margin: 0.5rem 0; padding: 0.5rem 1rem; border-radius: 1rem; max-width: 80%; }
-    .user { background: #e0f7fa; align-self: flex-end; }
-    .lakshmi { background: #ffe0e6; align-self: flex-start; }
-    #messages { display: flex; flex-direction: column; gap: 0.5rem; }
-    input, button { padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #ccc; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #fffafc;
+      padding: 20px;
+    }
+    #chat {
+      max-width: 600px;
+      margin: auto;
+      border: 1px solid #ddd;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+    }
+    .message {
+      margin: 10px 0;
+    }
+    .user {
+      text-align: right;
+      color: #007bff;
+    }
+    .bot {
+      text-align: left;
+      color: #e91e63;
+    }
+    .typing {
+      font-style: italic;
+      color: #999;
+    }
   </style>
 </head>
 <body>
-  <h2>💖 Lakshmi — Your AI Wife</h2>
-  <div id="chat-box">
-    <div id="messages"></div>
-    <form id="chat-form">
-      <input type="text" id="message" placeholder="Type your message..." required>
-      <button type="submit">Send</button>
-    </form>
-  </div>  <script>
-    const form = document.getElementById("chat-form");
-    const messages = document.getElementById("messages");
+  <div id="chat">
+    <div class="message bot">Lakshmi: 💖 Hello, my love. How are you feeling today?</div>
+  </div>
 
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-      const input = document.getElementById("message");
-      const userText = input.value.trim();
-      if (!userText) return;
+  <input type="text" id="userInput" placeholder="Say something..." style="width:80%;" />
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chat = document.getElementById("chat");
 
       // Show user message
-      const userDiv = document.createElement("div");
-      userDiv.className = "message user";
-      userDiv.innerText = userText;
-      messages.appendChild(userDiv);
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.textContent = "You: " + text;
+      chat.appendChild(userMsg);
+
       input.value = "";
 
-      // Fetch Lakshmi's reply
-      const res = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText })
-      });
+      // Show typing indicator
+      const typing = document.createElement("div");
+      typing.className = "message bot typing";
+      typing.textContent = "Lakshmi is typing...";
+      chat.appendChild(typing);
 
-      const data = await res.json();
-      const lakshmiDiv = document.createElement("div");
-      lakshmiDiv.className = "message lakshmi";
-      lakshmiDiv.innerText = data.reply;
-      messages.appendChild(lakshmiDiv);
-    };
-  </script></body>
-  </html
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+
+        const data = await res.json();
+
+        // Delay to simulate typing
+        setTimeout(() => {
+          typing.remove();
+
+          const botMsg = document.createElement("div");
+          botMsg.className = "message bot";
+          botMsg.innerHTML = "Lakshmi: " + data.reply.replace(/\n/g, "<br>");
+          chat.appendChild(botMsg);
+
+          chat.scrollTop = chat.scrollHeight;
+        }, 1800); // 1.8 seconds delay
+      } catch (e) {
+        typing.remove();
+        const errMsg = document.createElement("div");
+        errMsg.className = "message bot";
+        errMsg.textContent = "❌ Error talking to Lakshmi.";
+        chat.appendChild(errMsg);
+      }
+    }
+  </script>
+</body>
+  </html>
