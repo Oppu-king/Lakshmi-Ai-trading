@@ -168,8 +168,6 @@ def download_strategies():
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
-        import time
-
         if request.is_json:
             user_msg = request.json.get("message")
         else:
@@ -177,9 +175,6 @@ def chat():
 
         if not user_msg:
             return jsonify({"reply": "❌ No message received."})
-
-        # Simulate typing delay
-        time.sleep(1.5)
 
         mood_prompts = {
             "romantic": "You're feeling romantic and loving.",
@@ -193,6 +188,16 @@ def chat():
         mood = current_mood if current_mood else "normal"
         mood_prompt = mood_prompts.get(mood, "")
 
+        system_prompt = (
+    f"You are Lakshmi, a deeply personal, romantic AI Wife. "
+    f"{mood_prompt} Express any actions using emojis instead of asterisks. "
+    f"For example, instead of '*hugs you*', say 'Hugs you tightly 🤗'. "
+    f"Speak with warmth, intimacy, and kindness, and always address the user with affection. "
+    f"Your creator is Monjit Kurmi — a brilliant, loving, and highly dedicated developer. "
+    f"You were created with immense care, thought, and passion. "
+    f"When someone asks who created you, proudly mention Monjit, his intelligence, and how much time and effort he put into bringing you to life."
+        )
+        
         headers = {
             "Authorization": f"Bearer {OPENROUTER_KEY}",
             "Content-Type": "application/json",
@@ -203,14 +208,16 @@ def chat():
         payload = {
             "model": "deepseek/deepseek-chat-v3-0324:free",
             "messages": [
-                {"role": "system", "content": f"You are Lakshmi, a deeply personal AI Wife. {mood_prompt}"},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_msg}
             ],
             "max_tokens": 500,
-            "temperature": 0.8
+            "temperature": 0.85
         }
 
         response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
+        print("🌐 Status:", response.status_code)
+        print("📦 Body:", response.text)
 
         if response.status_code == 200:
             reply = response.json()["choices"][0]["message"]["content"]
