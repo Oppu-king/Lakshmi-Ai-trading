@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-import random, csv, os, requests
+import random, csv, os, requests, time
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -175,7 +175,11 @@ def chat():
         if not user_msg:
             return jsonify({"reply": "❌ No message received."})
 
-        # Optional: Mood prompt prefix
+        # Simulate typing effect in logs
+        print(f"\n🧑 You: {user_msg}")
+        print("🤖 Lakshmi is typing...")
+        time.sleep(2)  # Simulated typing delay
+
         mood_prompts = {
             "romantic": "You're feeling romantic and loving.",
             "angry": "You're in an annoyed and sharp mood.",
@@ -195,7 +199,7 @@ def chat():
             "X-Title": "Lakshmi AI Wife"
         }
 
-        data = {
+        payload = {
             "model": "meta-llama/llama-3-8b-instruct",
             "messages": [
                 {"role": "system", "content": f"You are Lakshmi, a deeply personal AI Wife. {mood_prompt}"},
@@ -205,9 +209,7 @@ def chat():
             "temperature": 0.8
         }
 
-        response = requests.post(OPENROUTER_URL, headers=headers, json=data)
-        print("🌐 Status:", response.status_code)
-        print("📦 Body:", response.text)
+        response = requests.post(OPENROUTER_URL, headers=headers, json=payload)
 
         if response.status_code == 200:
             reply = response.json()["choices"][0]["message"]["content"]
@@ -217,6 +219,7 @@ def chat():
     except Exception as e:
         reply = f"❌ Exception: {str(e)}"
 
+    print(f"💬 Lakshmi: {reply}")
     return jsonify({"reply": reply})
 
 # -------------- NEW ULTRA-BACKTESTER ROUTES ------------------
