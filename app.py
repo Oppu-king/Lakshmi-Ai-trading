@@ -1,11 +1,10 @@
 from flask import Flask, request, jsonify, redirect, url_for, session
-import os
-import time
-import random
-import csv
-import requests
+rom flask import Flask, render_template, request, redirect, url_for, session, jsonify
+import random, csv, os, requests
+from datetime import datetime
 from dotenv import load_dotenv
 from pathlib import Path
+
 
 # Load environment variables safely
 env_path = Path(__file__).parent / ".env"
