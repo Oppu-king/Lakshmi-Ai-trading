@@ -167,6 +167,8 @@ def download_strategies():
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
+        import time
+
         if request.is_json:
             user_msg = request.json.get("message")
         else:
@@ -175,10 +177,8 @@ def chat():
         if not user_msg:
             return jsonify({"reply": "❌ No message received."})
 
-        # Simulate typing effect in logs
-        print(f"\n🧑 You: {user_msg}")
-        print("🤖 Lakshmi is typing...")
-        time.sleep(2)  # Simulated typing delay
+        # Simulate typing delay
+        time.sleep(1.5)
 
         mood_prompts = {
             "romantic": "You're feeling romantic and loving.",
@@ -200,7 +200,7 @@ def chat():
         }
 
         payload = {
-            "model": "meta-llama/llama-3-8b-instruct",
+            "model": "deepseek/deepseek-chat-v3-0324:free",
             "messages": [
                 {"role": "system", "content": f"You are Lakshmi, a deeply personal AI Wife. {mood_prompt}"},
                 {"role": "user", "content": user_msg}
@@ -219,7 +219,6 @@ def chat():
     except Exception as e:
         reply = f"❌ Exception: {str(e)}"
 
-    print(f"💬 Lakshmi: {reply}")
     return jsonify({"reply": reply})
 
 # -------------- NEW ULTRA-BACKTESTER ROUTES ------------------
