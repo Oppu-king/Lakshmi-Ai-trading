@@ -123,7 +123,7 @@ def strategy_page():
     if os.path.exists("strategies.csv"):
         with open("strategies.csv", newline="") as f:
             reader = csv.reader(f)
-            next(reader, None)
+            next(reader, None)  # Skip header
             loaded_strategies = list(reader)
     return render_template("strategy.html", strategies=loaded_strategies)
 
@@ -135,13 +135,12 @@ def add_strategy():
     data = [
         request.form["name"],
         float(request.form["entry"]),
-        float(request.form["sl"]),         # <- added "sl" field correctly
+        float(request.form["sl"]),
         float(request.form["target"]),
         request.form["note"],
         datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ]
 
-append(data)
     file_exists = os.path.exists("strategies.csv")
     with open("strategies.csv", "a", newline="") as f:
         writer = csv.writer(f)
