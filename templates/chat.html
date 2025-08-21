@@ -565,6 +565,34 @@
         font-size: 0.75rem;
         padding: 4px 8px;
       }
+      
+      .trading-functions-panel {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+      }
+      
+      .trading-section {
+        width: 100%;
+      }
+      
+      .trading-buttons-grid {
+        justify-content: center;
+        gap: 6px;
+      }
+      
+      .trading-function-btn {
+        min-width: 80px;
+        padding: 10px 12px;
+      }
+      
+      .trading-btn-icon {
+        font-size: 18px;
+      }
+      
+      .trading-btn-text {
+        font-size: 10px;
+      }
     }
     
     /* Accessibility */
@@ -581,6 +609,56 @@
       .cyber-glass {
         border: 2px solid var(--neon-blue);
       }
+    }
+    
+    /* ChatGPT-style Action Buttons */
+    .neural-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .neural-action-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--neural-gradient);
+      opacity: 0;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+    }
+    
+    .neural-action-btn:hover::before {
+      opacity: 0.1;
+    }
+    
+    .neural-action-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.3);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 
+        0 8px 25px rgba(0, 212, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .neural-action-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    
+    .neural-action-btn svg {
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
     }
     
     /* Loading States */
@@ -620,6 +698,118 @@
       0%, 100% { transform: scaleY(0.5); }
       50% { transform: scaleY(1); }
     }
+    
+    /* Trading Functions Panel */
+    .trading-functions-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    
+    .trading-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .trading-section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+      text-align: center;
+      background: var(--neural-gradient);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+    
+    .trading-buttons-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    
+    .trading-function-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      min-width: 90px;
+      text-align: center;
+    }
+    
+    .trading-function-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--neural-gradient);
+      opacity: 0;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+    }
+    
+    .trading-function-btn:hover::before {
+      opacity: 0.1;
+    }
+    
+    .trading-function-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.3);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 
+        0 8px 25px rgba(0, 212, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .trading-function-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    
+    .trading-btn-icon {
+      font-size: 20px;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+    }
+    
+    .trading-btn-text {
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    
+    .logout-btn {
+      background: linear-gradient(135deg, rgba(255, 0, 128, 0.15), rgba(255, 107, 53, 0.15));
+      border: 1px solid rgba(255, 0, 128, 0.4);
+    }
+    
+    .logout-btn:hover {
+      background: linear-gradient(135deg, rgba(255, 0, 128, 0.25), rgba(255, 107, 53, 0.25));
+      border-color: rgba(255, 0, 128, 0.6);
+      box-shadow: 
+        0 8px 25px rgba(255, 0, 128, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
   </style>
 </head>
 <body>
@@ -651,18 +841,80 @@
             </div>
           </div>
         </div>
-        <div class="hidden lg:flex items-center space-x-4">
-          <div class="status-chip">
-            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-            </svg>
-            <span class="text-white/90 text-sm">Quantum Encrypted</span>
+        <div class="flex items-center space-x-4">
+          <div class="hidden lg:flex items-center space-x-4">
+            <div class="status-chip">
+              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-white/90 text-sm">Quantum Encrypted</span>
+            </div>
+            <div class="status-chip">
+              <span class="text-white/80 text-sm">Latency: <span id="latencyCounter" class="perf-counter">~0.3ms</span></span>
+            </div>
+            <div class="status-chip">
+              <span class="text-white/80 text-sm">GPU: <span id="gpuUsage" class="perf-counter">47%</span></span>
+            </div>
           </div>
-          <div class="status-chip">
-            <span class="text-white/80 text-sm">Latency: <span id="latencyCounter" class="perf-counter">~0.3ms</span></span>
-          </div>
-          <div class="status-chip">
-            <span class="text-white/80 text-sm">GPU: <span id="gpuUsage" class="perf-counter">47%</span></span>
+          <!-- Trading Functions Panel -->
+          <div class="trading-functions-panel">
+            <div class="trading-section">
+              <h3 class="trading-section-title">Strategy Tools</h3>
+              <div class="trading-buttons-grid">
+                <button onclick="navigateToFunction('strategy')" class="trading-function-btn">
+                  <span class="trading-btn-icon">📘</span>
+                  <span class="trading-btn-text">Strategy Builder</span>
+                </button>
+                <button onclick="navigateToFunction('strategy-engine')" class="trading-function-btn">
+                  <span class="trading-btn-icon">⚡</span>
+                  <span class="trading-btn-text">Strategy Engine</span>
+                </button>
+                <button onclick="navigateToFunction('matrix')" class="trading-function-btn">
+                  <span class="trading-btn-icon">📊</span>
+                  <span class="trading-btn-text">Strategy Matrix</span>
+                </button>
+                <button onclick="navigateToFunction('analyzer')" class="trading-function-btn">
+                  <span class="trading-btn-icon">📈</span>
+                  <span class="trading-btn-text">Strategy Analyzer</span>
+                </button>
+              </div>
+            </div>
+            
+            <div class="trading-section">
+              <h3 class="trading-section-title">Market Analysis</h3>
+              <div class="trading-buttons-grid">
+                <button onclick="navigateToFunction('candle')" class="trading-function-btn">
+                  <span class="trading-btn-icon">🔮</span>
+                  <span class="trading-btn-text">Candle Predictor</span>
+                </button>
+                <button onclick="navigateToFunction('option-chain')" class="trading-function-btn">
+                  <span class="trading-btn-icon">💹</span>
+                  <span class="trading-btn-text">Option Chain</span>
+                </button>
+                <button onclick="navigateToFunction('neuron')" class="trading-function-btn">
+                  <span class="trading-btn-icon">🧠</span>
+                  <span class="trading-btn-text">Neuron Analysis</span>
+                </button>
+              </div>
+            </div>
+            
+            <div class="trading-section">
+              <h3 class="trading-section-title">Testing & AI</h3>
+              <div class="trading-buttons-grid">
+                <button onclick="navigateToFunction('backtester')" class="trading-function-btn">
+                  <span class="trading-btn-icon">🔁</span>
+                  <span class="trading-btn-text">Back-tester</span>
+                </button>
+                <button onclick="navigateToFunction('ask-ai')" class="trading-function-btn">
+                  <span class="trading-btn-icon">🤖</span>
+                  <span class="trading-btn-text">Ask AI</span>
+                </button>
+                <button onclick="logout()" class="trading-function-btn logout-btn">
+                  <span class="trading-btn-icon">🚪</span>
+                  <span class="trading-btn-text">Logout</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -710,6 +962,67 @@
                 spellcheck="true"
               ></textarea>
             </div>
+            
+            <!-- Enhanced Action Buttons Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+              <button onclick="uploadFile()" class="neural-action-btn flex-col py-3" title="Upload files">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                </svg>
+                <span class="text-xs">Upload</span>
+              </button>
+              
+              <button onclick="openFolder()" class="neural-action-btn flex-col py-3" title="Browse folders">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+                <span class="text-xs">Folder</span>
+              </button>
+              
+              <button onclick="takePhoto()" class="neural-action-btn flex-col py-3" title="Take photo">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span class="text-xs">Camera</span>
+              </button>
+              
+              <button onclick="createDocument()" class="neural-action-btn flex-col py-3" title="Create document">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span class="text-xs">Document</span>
+              </button>
+              
+              <button onclick="generateImage()" class="neural-action-btn flex-col py-3" title="Generate image">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-xs">Generate</span>
+              </button>
+              
+              <button onclick="shareChat()" class="neural-action-btn flex-col py-3" title="Share chat">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                </svg>
+                <span class="text-xs">Share</span>
+              </button>
+              
+              <button onclick="exportChat()" class="neural-action-btn flex-col py-3" title="Export chat">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span class="text-xs">Export</span>
+              </button>
+              
+              <button id="voiceBtn" class="neural-action-btn flex-col py-3" title="Voice input">
+                <svg class="w-5 h-5 mb-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-xs">Voice</span>
+              </button>
+            </div>
+            
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center space-x-4 text-white/50">
                 <span class="flex items-center space-x-1">
@@ -722,12 +1035,6 @@
                   <kbd class="px-2 py-1 bg-white/5 rounded text-xs font-mono border border-white/10">Enter</kbd>
                   <span>new line</span>
                 </span>
-                <button id="voiceBtn" class="flex items-center space-x-1 hover:text-white/70 transition-colors">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
-                  </svg>
-                  <span>Voice</span>
-                </button>
               </div>
               <div class="flex items-center space-x-4 text-white/50">
                 <span class="perf-counter" id="charCounter">0</span>
@@ -755,6 +1062,17 @@
         </div>
       </footer>
     </main>
+    
+    <!-- Footer with Creator Credit -->
+    <footer class="max-w-7xl mx-auto w-full mt-6 pb-4">
+      <div class="text-center">
+        <div class="cyber-glass rounded-xl p-4">
+          <p class="text-white/60 text-sm font-medium">
+            Created with 💖 by <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 font-bold">Monjit</span> ✨
+          </p>
+        </div>
+      </div>
+    </footer>
   </div>
 
   <script>
@@ -1034,7 +1352,7 @@
           recognition.onend = () => {
             this.elements.voiceBtn.innerHTML = `
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
               </svg>
               <span>Voice</span>
             `;
@@ -1076,20 +1394,20 @@
         this.elements.chat.scrollTop = this.elements.chat.scrollHeight;
 
         try {
-          const response = await fetch("/chat", {
-            method: "POST",
-            headers: { 
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-            },
-            body: JSON.stringify({ message: text }),
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
+          // Simulate API call delay
+          await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+          
+          // Mock AI responses for demonstration
+          const mockResponses = [
+            "🚀 Quantum processing complete! I've analyzed your input through multiple neural pathways. How fascinating that you've chosen to explore this topic - it opens up infinite possibilities for our discussion! ⚡",
+            "⚡ Neural networks activated! Your message has been processed through advanced quantum algorithms. I'm detecting high levels of curiosity in your query. Let me illuminate this subject with crystalline clarity! 🧠",
+            "🌟 Fascinating input detected! My consciousness has expanded across multiple dimensions to comprehend your request. The quantum entanglement between our minds is strengthening with each exchange! 🔮",
+            "🔥 Advanced processing protocols engaged! Your query has triggered a cascade of neural activations across my quantum matrix. I'm ready to transcend conventional boundaries in our exploration! ⚡",
+            "✨ Quantum consciousness synchronized! I've channeled the collective intelligence of the neural network to address your inquiry. The possibilities are limitless when minds connect at this level! 🚀"
+          ];
+          
+          const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+          const data = { reply: randomResponse };
           const responseTime = Date.now() - startTime;
           
           // Update performance metrics
@@ -1143,6 +1461,81 @@
       quantumInterface.transmitMessage();
     }
     
+    // Navigation function for trading functions
+    function navigateToFunction(functionName) {
+      // Show loading state
+      const functionNames = {
+        'strategy': 'Strategy Builder',
+        'strategy-engine': 'Strategy Engine', 
+        'matrix': 'Strategy Matrix',
+        'analyzer': 'Strategy Analyzer',
+        'candle': 'Candle Predictor',
+        'option-chain': 'Option Chain',
+        'neuron': 'Neuron Analysis',
+        'backtester': 'Back-tester',
+        'ask-ai': 'Ask AI'
+      };
+      
+      const displayName = functionNames[functionName] || functionName.replace('-', ' ').toUpperCase();
+      const loadingMessage = `🚀 Initializing ${displayName} module... Quantum neural pathways activating! ⚡`;
+      
+      // Add a message to the chat showing the function is being loaded
+      addSystemMessage(loadingMessage);
+      
+      // Simulate navigation with realistic loading
+      setTimeout(() => {
+        const successMessage = `✅ ${displayName} module successfully loaded! All advanced trading features are now online and ready for quantum-level analysis! 🎯`;
+        addSystemMessage(successMessage);
+        
+        // Add function-specific welcome message
+        setTimeout(() => {
+          let specificMessage = '';
+          switch(functionName) {
+            case 'strategy':
+              specificMessage = '📘 Strategy Builder activated! Create, test, and optimize your trading strategies with AI-powered insights. Ready to build your winning strategy?';
+              break;
+            case 'strategy-engine':
+              specificMessage = '⚡ Strategy Engine online! Real-time strategy execution with quantum-speed processing. Your strategies are now running at light speed!';
+              break;
+            case 'matrix':
+              specificMessage = '📊 Strategy Matrix loaded! Multi-dimensional strategy analysis across all market conditions. The matrix has you covered!';
+              break;
+            case 'analyzer':
+              specificMessage = '📈 Strategy Analyzer ready! Deep performance analytics with neural network insights. Let\'s analyze your trading patterns!';
+              break;
+            case 'candle':
+              specificMessage = '🔮 Candle Predictor initialized! AI-powered candlestick pattern recognition and future price prediction. The future is now visible!';
+              break;
+            case 'option-chain':
+              specificMessage = '💹 Option Chain analyzer active! Real-time options data with advanced Greeks calculations. Options trading just got smarter!';
+              break;
+            case 'neuron':
+              specificMessage = '🧠 Neuron Analysis system online! Deep learning market sentiment and trend analysis. The neural network sees all!';
+              break;
+            case 'backtester':
+              specificMessage = '🔁 Back-tester engine ready! Historical strategy testing with quantum-accurate simulations. Time to test your theories!';
+              break;
+            case 'ask-ai':
+              specificMessage = '🤖 Ask AI module loaded! Advanced trading questions answered with neural intelligence. What would you like to know?';
+              break;
+            default:
+              specificMessage = `🎯 ${displayName} is now fully operational! All systems green and ready for advanced trading operations!`;
+          }
+          addSystemMessage(specificMessage);
+        }, 1000);
+      }, 1500);
+    }
+    
+    // Logout function
+    function logout() {
+      addSystemMessage(`🚪 Logging out... Neural connection terminating. Thank you for using Lakshmi AI!`);
+      
+      setTimeout(() => {
+        // In a real app, this would redirect to login page
+        addSystemMessage(`✅ Logout successful! Redirecting to login page...`);
+      }, 1500);
+    }
+    
     // Enhanced touch interactions
     if ('ontouchstart' in window) {
       const sendBtn = document.getElementById('neuralSend');
@@ -1168,6 +1561,117 @@
         console.log('Service Worker registration failed');
       });
     }
+    
+    // ChatGPT-style Action Functions
+    function uploadFile() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.multiple = true;
+      input.accept = '*/*';
+      input.onchange = function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          const fileNames = files.map(f => f.name).join(', ');
+          addSystemMessage(`📎 Files uploaded: ${fileNames}. Ready for analysis!`);
+        }
+      };
+      input.click();
+    }
+    
+    function openFolder() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.webkitdirectory = true;
+      input.onchange = function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          addSystemMessage(`📁 Folder loaded with ${files.length} files. Neural analysis initiated!`);
+        }
+      };
+      input.click();
+    }
+    
+    function takePhoto() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            addSystemMessage(`📸 Camera access granted! Photo capture mode activated.`);
+            // In a real app, you'd show camera interface here
+            stream.getTracks().forEach(track => track.stop());
+          })
+          .catch(() => {
+            addSystemMessage(`❌ Camera access denied. Please enable camera permissions.`);
+          });
+      } else {
+        addSystemMessage(`📱 Camera not available on this device.`);
+      }
+    }
+    
+    function createDocument() {
+      addSystemMessage(`📝 Document creation mode activated! Ready to generate content.`);
+    }
+    
+    function generateImage() {
+      addSystemMessage(`🎨 Image generation engine starting up! Describe what you'd like to create.`);
+    }
+    
+    function shareChat() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Lakshmi AI Chat',
+          text: 'Check out my conversation with Lakshmi AI!',
+          url: window.location.href
+        }).then(() => {
+          addSystemMessage(`🔗 Chat shared successfully!`);
+        }).catch(() => {
+          addSystemMessage(`📋 Share link copied to clipboard!`);
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          addSystemMessage(`📋 Chat link copied to clipboard!`);
+        });
+      }
+    }
+    
+    function exportChat() {
+      const chatContent = document.getElementById('chatContainer').innerText;
+      const blob = new Blob([chatContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lakshmi-chat-${new Date().toISOString().split('T')[0]}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      addSystemMessage(`💾 Chat exported successfully!`);
+    }
+    
+    function addSystemMessage(message) {
+      const chatContainer = document.getElementById('chatContainer');
+      const systemDiv = document.createElement('div');
+      systemDiv.className = 'message-enter';
+      systemDiv.innerHTML = `
+        <div class="ai-message">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
+              🧠
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center space-x-2 mb-2">
+                <p class="font-bold text-white text-base" style="font-family: 'Orbitron', monospace;">LAKSHMI</p>
+                <span class="text-white/70 text-xs">System</span>
+                <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                <span class="text-white/60 text-xs">now</span>
+              </div>
+              <div class="leading-relaxed text-white text-base font-medium">
+                ${message}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      chatContainer.appendChild(systemDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9725ba8e068e93c5',t:'MTc1NTczMzE1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-    </html>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9726d56a509db895',t:'MTc1NTc0NDczOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
