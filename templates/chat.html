@@ -752,33 +752,27 @@
     }
     
     .neural-dropdown {
-      position: fixed !important;
-      bottom: 100px !important;
-      right: 20px !important;
-      background: rgba(5, 5, 8, 0.98) !important;
-      backdrop-filter: blur(30px) saturate(200%) !important;
-      -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
-      border: 3px solid rgba(0, 212, 255, 0.8) !important;
+      position: absolute;
+      top: calc(100% + 15px);
+      right: 0;
+      background: rgba(10, 10, 15, 0.98);
+      backdrop-filter: blur(25px) saturate(200%);
+      -webkit-backdrop-filter: blur(25px) saturate(200%);
+      border: 3px solid rgba(0, 212, 255, 0.6);
       border-radius: 20px;
       background-clip: padding-box;
       box-shadow: 
-        0 30px 80px rgba(0, 0, 0, 0.95),
-        0 0 150px rgba(0, 212, 255, 0.7),
-        0 0 300px rgba(139, 92, 246, 0.3),
-        inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
-      min-width: 380px;
-      max-width: 480px;
-      width: 400px;
-      z-index: 2147483647 !important;
+        0 25px 50px rgba(0, 0, 0, 0.9),
+        0 0 100px rgba(0, 212, 255, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      min-width: 350px;
+      max-width: 450px;
+      z-index: 99999;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(30px) scale(0.85);
-      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: translateY(-20px) scale(0.9);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       pointer-events: none;
-      max-height: calc(100vh - 140px);
-      overflow: visible;
-      display: flex;
-      flex-direction: column;
     }
     
     .neural-dropdown::before {
@@ -795,17 +789,16 @@
     }
     
     .neural-dropdown.show {
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: translateY(0) scale(1) !important;
-      pointer-events: auto !important;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
     }
     
     .neural-dropdown-header {
-      padding: 10px 20px 8px;
+      padding: 20px 20px 15px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       text-align: center;
-      flex-shrink: 0;
     }
     
     .neural-dropdown-title {
@@ -828,14 +821,11 @@
     }
     
     .neural-dropdown-content {
-      padding: 10px 8px;
-      flex: 1;
+      padding: 15px 10px;
+      max-height: 400px;
       overflow-y: auto;
-      overflow-x: hidden;
       scrollbar-width: thin;
       scrollbar-color: var(--neon-blue) transparent;
-      min-height: 400px;
-      max-height: 500px;
     }
     
     .neural-dropdown-content::-webkit-scrollbar {
@@ -848,7 +838,7 @@
     }
     
     .neural-dropdown-section {
-      margin-bottom: 8px;
+      margin-bottom: 15px;
     }
     
     .neural-dropdown-section-title {
@@ -864,14 +854,14 @@
     .neural-dropdown-item {
       display: flex;
       align-items: center;
-      padding: 10px 15px;
+      padding: 14px 18px;
       color: white;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 500;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 10px;
-      margin: 2px 6px;
+      border-radius: 12px;
+      margin: 3px 8px;
       position: relative;
       overflow: hidden;
       border: 1px solid transparent;
@@ -1576,7 +1566,7 @@
           recognition.onend = () => {
             this.elements.voiceBtn.innerHTML = `
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
               </svg>
               <span>Voice</span>
             `;
@@ -1931,5 +1921,5 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972725c76516d7fb',t:'MTc1NTc0ODAzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9727356461468fb6',t:'MTc1NTc0ODY3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
