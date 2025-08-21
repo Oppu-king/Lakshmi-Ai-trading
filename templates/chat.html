@@ -565,34 +565,6 @@
         font-size: 0.75rem;
         padding: 4px 8px;
       }
-      
-      .trading-functions-panel {
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-      }
-      
-      .trading-section {
-        width: 100%;
-      }
-      
-      .trading-buttons-grid {
-        justify-content: center;
-        gap: 6px;
-      }
-      
-      .trading-function-btn {
-        min-width: 80px;
-        padding: 10px 12px;
-      }
-      
-      .trading-btn-icon {
-        font-size: 18px;
-      }
-      
-      .trading-btn-text {
-        font-size: 10px;
-      }
     }
     
     /* Accessibility */
@@ -699,67 +671,213 @@
       50% { transform: scaleY(1); }
     }
     
-    /* Trading Functions Panel */
-    .trading-functions-panel {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: flex-start;
+    /* Advanced Neural Menu System */
+    .neural-menu-container {
+      position: relative;
     }
     
-    .trading-section {
+    .neural-menu-btn {
+      background: var(--neural-gradient);
+      background-size: 300% 300%;
+      animation: neuralPulse 8s ease-in-out infinite;
+      border: none;
+      border-radius: 15px;
+      width: 60px;
+      height: 45px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 0 25px rgba(0, 212, 255, 0.4),
+        0 0 50px rgba(139, 92, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      gap: 3px;
     }
     
-    .trading-section-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 14px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.8);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin: 0;
+    .neural-menu-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.1));
+      transform: translateX(-100%) rotate(45deg);
+      transition: transform 0.6s ease;
+    }
+    
+    .neural-menu-btn:hover::before {
+      transform: translateX(100%) rotate(45deg);
+    }
+    
+    .neural-menu-btn:hover {
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 
+        0 0 35px rgba(0, 212, 255, 0.6),
+        0 0 70px rgba(139, 92, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    
+    .neural-menu-btn.active {
+      transform: translateY(-2px) scale(1.05) rotate(180deg);
+      box-shadow: 
+        0 0 40px rgba(255, 0, 128, 0.6),
+        0 0 80px rgba(255, 107, 53, 0.4);
+    }
+    
+    .menu-bar {
+      width: 24px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+    
+    .neural-menu-btn.active .menu-bar:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+      background: var(--neon-pink);
+    }
+    
+    .neural-menu-btn.active .menu-bar:nth-child(2) {
+      opacity: 0;
+      transform: scale(0);
+    }
+    
+    .neural-menu-btn.active .menu-bar:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+      background: var(--neon-orange);
+    }
+    
+    .neural-dropdown {
+      position: fixed !important;
+      bottom: 100px !important;
+      right: 20px !important;
+      background: rgba(5, 5, 8, 0.98) !important;
+      backdrop-filter: blur(30px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+      border: 3px solid rgba(0, 212, 255, 0.8) !important;
+      border-radius: 20px;
+      background-clip: padding-box;
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.95),
+        0 0 150px rgba(0, 212, 255, 0.7),
+        0 0 300px rgba(139, 92, 246, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
+      min-width: 380px;
+      max-width: 480px;
+      width: 400px;
+      z-index: 2147483647 !important;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(30px) scale(0.85);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      max-height: calc(100vh - 140px);
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .neural-dropdown::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 2px;
+      background: var(--neural-gradient);
+      border-radius: 20px;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      animation: borderFlow 4s linear infinite;
+    }
+    
+    .neural-dropdown.show {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(1) !important;
+      pointer-events: auto !important;
+    }
+    
+    .neural-dropdown-header {
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       text-align: center;
+      flex-shrink: 0;
+    }
+    
+    .neural-dropdown-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 18px;
+      font-weight: 700;
       background: var(--neural-gradient);
       background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       animation: titleGlow 3s ease-in-out infinite;
+      margin-bottom: 5px;
     }
     
-    .trading-buttons-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-    }
-    
-    .trading-function-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: white;
+    .neural-dropdown-subtitle {
       font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
+    }
+    
+    .neural-dropdown-content {
+      padding: 10px 8px;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--neon-blue) transparent;
+      min-height: 400px;
+      max-height: 500px;
+    }
+    
+    .neural-dropdown-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    .neural-dropdown-content::-webkit-scrollbar-thumb {
+      background: var(--neural-gradient);
+      border-radius: 2px;
+    }
+    
+    .neural-dropdown-section {
+      margin-bottom: 8px;
+    }
+    
+    .neural-dropdown-section-title {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      padding-left: 15px;
+      font-weight: 600;
+    }
+    
+    .neural-dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
       font-weight: 500;
-      cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      margin: 2px 6px;
       position: relative;
       overflow: hidden;
-      min-width: 90px;
-      text-align: center;
+      border: 1px solid transparent;
     }
     
-    .trading-function-btn::before {
+    .neural-dropdown-item::before {
       content: '';
       position: absolute;
       inset: 0;
@@ -769,46 +887,111 @@
       border-radius: 12px;
     }
     
-    .trading-function-btn:hover::before {
-      opacity: 0.1;
+    .neural-dropdown-item:hover::before {
+      opacity: 0.15;
     }
     
-    .trading-function-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
+    .neural-dropdown-item:hover {
+      color: white;
+      transform: translateX(8px) scale(1.02);
       border-color: rgba(0, 212, 255, 0.3);
-      transform: translateY(-2px) scale(1.05);
       box-shadow: 
-        0 8px 25px rgba(0, 212, 255, 0.15),
+        0 8px 25px rgba(0, 212, 255, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     
-    .trading-function-btn:active {
-      transform: translateY(0) scale(0.98);
+    .neural-dropdown-item:active {
+      transform: translateX(6px) scale(0.98);
     }
     
-    .trading-btn-icon {
-      font-size: 20px;
+    .neural-dropdown-item-icon {
+      font-size: 18px;
+      margin-right: 12px;
+      width: 24px;
+      text-align: center;
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
     }
     
-    .trading-btn-text {
-      font-size: 11px;
+    .neural-dropdown-item-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .neural-dropdown-item-title {
+      font-size: 14px;
       font-weight: 600;
-      line-height: 1.2;
-      white-space: nowrap;
+      margin-bottom: 2px;
     }
     
-    .logout-btn {
+    .neural-dropdown-item-desc {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
+    }
+    
+    .neural-dropdown-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), rgba(255, 0, 128, 0.3), transparent);
+      margin: 12px 16px;
+      position: relative;
+    }
+    
+    .neural-dropdown-divider::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    .neural-dropdown-form {
+      margin: 8px;
+    }
+    
+    .neural-dropdown-logout {
+      width: 100%;
       background: linear-gradient(135deg, rgba(255, 0, 128, 0.15), rgba(255, 107, 53, 0.15));
-      border: 1px solid rgba(255, 0, 128, 0.4);
+      border: 2px solid rgba(255, 0, 128, 0.4);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
     }
     
-    .logout-btn:hover {
+    .neural-dropdown-logout::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.1));
+      transform: translateX(-100%) rotate(45deg);
+      transition: transform 0.5s ease;
+    }
+    
+    .neural-dropdown-logout:hover::before {
+      transform: translateX(100%) rotate(45deg);
+    }
+    
+    .neural-dropdown-logout:hover {
       background: linear-gradient(135deg, rgba(255, 0, 128, 0.25), rgba(255, 107, 53, 0.25));
       border-color: rgba(255, 0, 128, 0.6);
+      transform: translateY(-2px) scale(1.02);
       box-shadow: 
-        0 8px 25px rgba(255, 0, 128, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 10px 30px rgba(255, 0, 128, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    .neural-dropdown-logout:active {
+      transform: translateY(0) scale(0.98);
     }
   </style>
 </head>
@@ -856,63 +1039,106 @@
               <span class="text-white/80 text-sm">GPU: <span id="gpuUsage" class="perf-counter">47%</span></span>
             </div>
           </div>
-          <!-- Trading Functions Panel -->
-          <div class="trading-functions-panel">
-            <div class="trading-section">
-              <h3 class="trading-section-title">Strategy Tools</h3>
-              <div class="trading-buttons-grid">
-                <button onclick="navigateToFunction('strategy')" class="trading-function-btn">
-                  <span class="trading-btn-icon">📘</span>
-                  <span class="trading-btn-text">Strategy Builder</span>
-                </button>
-                <button onclick="navigateToFunction('strategy-engine')" class="trading-function-btn">
-                  <span class="trading-btn-icon">⚡</span>
-                  <span class="trading-btn-text">Strategy Engine</span>
-                </button>
-                <button onclick="navigateToFunction('matrix')" class="trading-function-btn">
-                  <span class="trading-btn-icon">📊</span>
-                  <span class="trading-btn-text">Strategy Matrix</span>
-                </button>
-                <button onclick="navigateToFunction('analyzer')" class="trading-function-btn">
-                  <span class="trading-btn-icon">📈</span>
-                  <span class="trading-btn-text">Strategy Analyzer</span>
-                </button>
+          <!-- Advanced Neural Menu -->
+          <div class="neural-menu-container">
+            <button id="menuToggle" class="neural-menu-btn" onclick="toggleMenu()">
+              <div class="menu-bar"></div>
+              <div class="menu-bar"></div>
+              <div class="menu-bar"></div>
+            </button>
+            <div id="menu-dropdown" class="neural-dropdown">
+              <div class="neural-dropdown-header">
+                <div class="neural-dropdown-title">LAKSHMI DASHBOARD</div>
+                <div class="neural-dropdown-subtitle">Trading & Analysis Suite</div>
               </div>
-            </div>
-            
-            <div class="trading-section">
-              <h3 class="trading-section-title">Market Analysis</h3>
-              <div class="trading-buttons-grid">
-                <button onclick="navigateToFunction('candle')" class="trading-function-btn">
-                  <span class="trading-btn-icon">🔮</span>
-                  <span class="trading-btn-text">Candle Predictor</span>
-                </button>
-                <button onclick="navigateToFunction('option-chain')" class="trading-function-btn">
-                  <span class="trading-btn-icon">💹</span>
-                  <span class="trading-btn-text">Option Chain</span>
-                </button>
-                <button onclick="navigateToFunction('neuron')" class="trading-function-btn">
-                  <span class="trading-btn-icon">🧠</span>
-                  <span class="trading-btn-text">Neuron Analysis</span>
-                </button>
-              </div>
-            </div>
-            
-            <div class="trading-section">
-              <h3 class="trading-section-title">Testing & AI</h3>
-              <div class="trading-buttons-grid">
-                <button onclick="navigateToFunction('backtester')" class="trading-function-btn">
-                  <span class="trading-btn-icon">🔁</span>
-                  <span class="trading-btn-text">Back-tester</span>
-                </button>
-                <button onclick="navigateToFunction('ask-ai')" class="trading-function-btn">
-                  <span class="trading-btn-icon">🤖</span>
-                  <span class="trading-btn-text">Ask AI</span>
-                </button>
-                <button onclick="logout()" class="trading-function-btn logout-btn">
-                  <span class="trading-btn-icon">🚪</span>
-                  <span class="trading-btn-text">Logout</span>
-                </button>
+              <div class="neural-dropdown-content">
+                <div class="neural-dropdown-section">
+                  <div class="neural-dropdown-section-title">Strategy Tools</div>
+                  <a href="#" onclick="navigateToFunction('strategy')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">📘</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Strategy Builder</div>
+                      <div class="neural-dropdown-item-desc">Create custom trading strategies</div>
+                    </div>
+                  </a>
+                  <a href="#" onclick="navigateToFunction('strategy-engine')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">💋</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Strategy Engine</div>
+                      <div class="neural-dropdown-item-desc">Execute and manage strategies</div>
+                    </div>
+                  </a>
+                  <a href="#" onclick="navigateToFunction('matrix')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">📊</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Strategy Matrix</div>
+                      <div class="neural-dropdown-item-desc">Multi-dimensional analysis</div>
+                    </div>
+                  </a>
+                  <a href="#" onclick="navigateToFunction('analyzer')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">📈</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Strategy Analyzer</div>
+                      <div class="neural-dropdown-item-desc">Performance metrics & insights</div>
+                    </div>
+                  </a>
+                </div>
+                
+                <div class="neural-dropdown-divider"></div>
+                
+                <div class="neural-dropdown-section">
+                  <div class="neural-dropdown-section-title">Market Analysis</div>
+                  <a href="#" onclick="navigateToFunction('candle')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">🔮</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Candle Predictor</div>
+                      <div class="neural-dropdown-item-desc">AI-powered price predictions</div>
+                    </div>
+                  </a>
+                  <a href="#" onclick="navigateToFunction('option-chain')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">💹</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Option Chain</div>
+                      <div class="neural-dropdown-item-desc">Real-time options data</div>
+                    </div>
+                  </a>
+                  <a href="#" onclick="navigateToFunction('neuron')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">🧠</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Neuron Analysis</div>
+                      <div class="neural-dropdown-item-desc">Deep learning insights</div>
+                    </div>
+                  </a>
+                </div>
+                
+                <div class="neural-dropdown-divider"></div>
+                
+                <div class="neural-dropdown-section">
+                  <div class="neural-dropdown-section-title">Testing & AI</div>
+                  <a href="#" onclick="navigateToFunction('backtester')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">🔁</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Back-tester</div>
+                      <div class="neural-dropdown-item-desc">Historical strategy testing</div>
+                    </div>
+                  </a>
+                  <a href="#" onclick="navigateToFunction('ask-ai')" class="neural-dropdown-item">
+                    <div class="neural-dropdown-item-icon">🤖</div>
+                    <div class="neural-dropdown-item-text">
+                      <div class="neural-dropdown-item-title">Ask AI</div>
+                      <div class="neural-dropdown-item-desc">AI trading assistant</div>
+                    </div>
+                  </a>
+                </div>
+                
+                <div class="neural-dropdown-divider"></div>
+                
+                <form method="POST" action="/logout" class="neural-dropdown-form">
+                  <button type="submit" class="neural-dropdown-logout">
+                    <span>🚪</span>
+                    <span>Logout</span>
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -949,6 +1175,59 @@
 
       <!-- Neural Input Interface -->
       <footer class="p-6 border-t border-white/5">
+        <!-- ChatGPT-style Action Buttons -->
+        <div class="flex items-center gap-3 mb-4 flex-wrap">
+          <button onclick="uploadFile()" class="neural-action-btn" title="Upload files">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+            </svg>
+            <span>Upload</span>
+          </button>
+          
+          <button onclick="openFolder()" class="neural-action-btn" title="Browse folders">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+            </svg>
+            <span>Folder</span>
+          </button>
+          
+          <button onclick="takePhoto()" class="neural-action-btn" title="Take photo">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <span>Camera</span>
+          </button>
+          
+          <button onclick="createDocument()" class="neural-action-btn" title="Create document">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span>Document</span>
+          </button>
+          
+          <button onclick="generateImage()" class="neural-action-btn" title="Generate image">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span>Generate</span>
+          </button>
+          
+          <button onclick="shareChat()" class="neural-action-btn" title="Share chat">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+            </svg>
+            <span>Share</span>
+          </button>
+          
+          <button onclick="exportChat()" class="neural-action-btn" title="Export chat">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span>Export</span>
+          </button>
+        </div>
+        
         <div class="flex items-start gap-4">
           <div class="flex-1 space-y-4">
             <div class="neural-input-wrapper">
@@ -962,67 +1241,6 @@
                 spellcheck="true"
               ></textarea>
             </div>
-            
-            <!-- Enhanced Action Buttons Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
-              <button onclick="uploadFile()" class="neural-action-btn flex-col py-3" title="Upload files">
-                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                </svg>
-                <span class="text-xs">Upload</span>
-              </button>
-              
-              <button onclick="openFolder()" class="neural-action-btn flex-col py-3" title="Browse folders">
-                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                </svg>
-                <span class="text-xs">Folder</span>
-              </button>
-              
-              <button onclick="takePhoto()" class="neural-action-btn flex-col py-3" title="Take photo">
-                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <span class="text-xs">Camera</span>
-              </button>
-              
-              <button onclick="createDocument()" class="neural-action-btn flex-col py-3" title="Create document">
-                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <span class="text-xs">Document</span>
-              </button>
-              
-              <button onclick="generateImage()" class="neural-action-btn flex-col py-3" title="Generate image">
-                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                <span class="text-xs">Generate</span>
-              </button>
-              
-              <button onclick="shareChat()" class="neural-action-btn flex-col py-3" title="Share chat">
-                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
-                </svg>
-                <span class="text-xs">Share</span>
-              </button>
-              
-              <button onclick="exportChat()" class="neural-action-btn flex-col py-3" title="Export chat">
-                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <span class="text-xs">Export</span>
-              </button>
-              
-              <button id="voiceBtn" class="neural-action-btn flex-col py-3" title="Voice input">
-                <svg class="w-5 h-5 mb-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-xs">Voice</span>
-              </button>
-            </div>
-            
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center space-x-4 text-white/50">
                 <span class="flex items-center space-x-1">
@@ -1035,6 +1253,12 @@
                   <kbd class="px-2 py-1 bg-white/5 rounded text-xs font-mono border border-white/10">Enter</kbd>
                   <span>new line</span>
                 </span>
+                <button id="voiceBtn" class="flex items-center space-x-1 hover:text-white/70 transition-colors">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span>Voice</span>
+                </button>
               </div>
               <div class="flex items-center space-x-4 text-white/50">
                 <span class="perf-counter" id="charCounter">0</span>
@@ -1463,78 +1687,112 @@
     
     // Navigation function for trading functions
     function navigateToFunction(functionName) {
-      // Show loading state
-      const functionNames = {
-        'strategy': 'Strategy Builder',
-        'strategy-engine': 'Strategy Engine', 
-        'matrix': 'Strategy Matrix',
-        'analyzer': 'Strategy Analyzer',
-        'candle': 'Candle Predictor',
-        'option-chain': 'Option Chain',
-        'neuron': 'Neuron Analysis',
-        'backtester': 'Back-tester',
-        'ask-ai': 'Ask AI'
-      };
+      // Close the menu first
+      const dropdown = document.getElementById('menu-dropdown');
+      const menuBtn = document.getElementById('menuToggle');
+      dropdown.classList.remove('show');
+      menuBtn.classList.remove('active');
       
-      const displayName = functionNames[functionName] || functionName.replace('-', ' ').toUpperCase();
-      const loadingMessage = `🚀 Initializing ${displayName} module... Quantum neural pathways activating! ⚡`;
+      // Show loading state
+      const loadingMessage = `🚀 Initializing ${functionName.replace('-', ' ').toUpperCase()} module... Please wait while we establish quantum connection! ⚡`;
       
       // Add a message to the chat showing the function is being loaded
-      addSystemMessage(loadingMessage);
+      const chatContainer = document.getElementById('chatContainer');
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'message-enter';
+      loadingDiv.innerHTML = `
+        <div class="ai-message">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
+              🧠
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center space-x-2 mb-2">
+                <p class="font-bold text-white text-base" style="font-family: 'Orbitron', monospace;">LAKSHMI</p>
+                <span class="text-white/70 text-xs">Neural AI</span>
+                <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                <span class="text-white/60 text-xs">now</span>
+              </div>
+              <div class="leading-relaxed text-white text-base font-medium">
+                ${loadingMessage}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      chatContainer.appendChild(loadingDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
       
-      // Simulate navigation with realistic loading
+      // Simulate navigation (in a real app, this would redirect to the actual page)
       setTimeout(() => {
-        const successMessage = `✅ ${displayName} module successfully loaded! All advanced trading features are now online and ready for quantum-level analysis! 🎯`;
-        addSystemMessage(successMessage);
+        const successMessage = `✅ ${functionName.replace('-', ' ').toUpperCase()} module successfully loaded! All trading functions are now available. You can start using the advanced features immediately! 🎯`;
         
-        // Add function-specific welcome message
-        setTimeout(() => {
-          let specificMessage = '';
-          switch(functionName) {
-            case 'strategy':
-              specificMessage = '📘 Strategy Builder activated! Create, test, and optimize your trading strategies with AI-powered insights. Ready to build your winning strategy?';
-              break;
-            case 'strategy-engine':
-              specificMessage = '⚡ Strategy Engine online! Real-time strategy execution with quantum-speed processing. Your strategies are now running at light speed!';
-              break;
-            case 'matrix':
-              specificMessage = '📊 Strategy Matrix loaded! Multi-dimensional strategy analysis across all market conditions. The matrix has you covered!';
-              break;
-            case 'analyzer':
-              specificMessage = '📈 Strategy Analyzer ready! Deep performance analytics with neural network insights. Let\'s analyze your trading patterns!';
-              break;
-            case 'candle':
-              specificMessage = '🔮 Candle Predictor initialized! AI-powered candlestick pattern recognition and future price prediction. The future is now visible!';
-              break;
-            case 'option-chain':
-              specificMessage = '💹 Option Chain analyzer active! Real-time options data with advanced Greeks calculations. Options trading just got smarter!';
-              break;
-            case 'neuron':
-              specificMessage = '🧠 Neuron Analysis system online! Deep learning market sentiment and trend analysis. The neural network sees all!';
-              break;
-            case 'backtester':
-              specificMessage = '🔁 Back-tester engine ready! Historical strategy testing with quantum-accurate simulations. Time to test your theories!';
-              break;
-            case 'ask-ai':
-              specificMessage = '🤖 Ask AI module loaded! Advanced trading questions answered with neural intelligence. What would you like to know?';
-              break;
-            default:
-              specificMessage = `🎯 ${displayName} is now fully operational! All systems green and ready for advanced trading operations!`;
-          }
-          addSystemMessage(specificMessage);
-        }, 1000);
-      }, 1500);
+        const successDiv = document.createElement('div');
+        successDiv.className = 'message-enter';
+        successDiv.innerHTML = `
+          <div class="ai-message">
+            <div class="flex items-start space-x-3">
+              <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
+                🧠
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-2 mb-2">
+                  <p class="font-bold text-white text-base" style="font-family: 'Orbitron', monospace;">LAKSHMI</p>
+                  <span class="text-white/70 text-xs">Neural AI</span>
+                  <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                  <span class="text-white/60 text-xs">now</span>
+                </div>
+                <div class="leading-relaxed text-white text-base font-medium">
+                  ${successMessage}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        chatContainer.appendChild(successDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 2000);
     }
     
-    // Logout function
-    function logout() {
-      addSystemMessage(`🚪 Logging out... Neural connection terminating. Thank you for using Lakshmi AI!`);
+    // Advanced Neural Menu Toggle System
+    function toggleMenu() {
+      const dropdown = document.getElementById('menu-dropdown');
+      const menuBtn = document.getElementById('menuToggle');
+      const isVisible = dropdown.classList.contains('show');
       
-      setTimeout(() => {
-        // In a real app, this would redirect to login page
-        addSystemMessage(`✅ Logout successful! Redirecting to login page...`);
-      }, 1500);
+      if (isVisible) {
+        // Close menu
+        dropdown.classList.remove('show');
+        menuBtn.classList.remove('active');
+      } else {
+        // Open menu
+        dropdown.classList.add('show');
+        menuBtn.classList.add('active');
+      }
     }
+    
+    // Enhanced click outside handler
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('menu-dropdown');
+      const menuContainer = document.querySelector('.neural-menu-container');
+      
+      if (!menuContainer.contains(event.target)) {
+        dropdown.classList.remove('show');
+        document.getElementById('menuToggle').classList.remove('active');
+      }
+    });
+    
+    // Keyboard navigation support
+    document.addEventListener('keydown', function(event) {
+      const dropdown = document.getElementById('menu-dropdown');
+      const menuBtn = document.getElementById('menuToggle');
+      
+      if (event.key === 'Escape' && dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+        menuBtn.classList.remove('active');
+        menuBtn.focus();
+      }
+    });
     
     // Enhanced touch interactions
     if ('ontouchstart' in window) {
@@ -1673,5 +1931,5 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9726d56a509db895',t:'MTc1NTc0NDczOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972725c76516d7fb',t:'MTc1NTc0ODAzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
