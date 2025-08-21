@@ -111,9 +111,11 @@ def logout():
 
 @app.route("/dashboard")
 def dashboard():
-    if 'username' not in session:
+    if "username" not in session and "email" not in session:
         return redirect("/login")
-    return render_template("index.html", mood=current_mood)
+
+    name = session.get("username") or session.get("email")
+    return render_template("chat.html", name=name, mood=current_mood)
 
 @app.route("/strategy")
 def strategy_page():
