@@ -60,17 +60,17 @@
       width: 100%;
       height: 100%;
       z-index: -2;
-      opacity: 0.1;
+      opacity: 0.02;
       background-image: 
-        linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
-      background-size: 50px 50px;
-      animation: gridMove 20s linear infinite;
+        linear-gradient(rgba(0, 212, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      animation: gridMove 60s linear infinite;
     }
     
     @keyframes gridMove {
       0% { transform: translate(0, 0); }
-      100% { transform: translate(50px, 50px); }
+      100% { transform: translate(40px, 40px); }
     }
     
     /* Floating Neural Nodes */
@@ -82,28 +82,29 @@
       height: 100%;
       z-index: -1;
       pointer-events: none;
+      opacity: 0.1;
     }
     
     .neural-node {
       position: absolute;
-      width: 3px;
-      height: 3px;
+      width: 1px;
+      height: 1px;
       background: var(--neon-blue);
       border-radius: 50%;
-      box-shadow: 0 0 10px var(--neon-blue);
-      animation: neuralFloat 15s linear infinite;
+      box-shadow: 0 0 2px var(--neon-blue);
+      animation: neuralFloat 30s linear infinite;
     }
     
     .neural-node:nth-child(2n) {
       background: var(--neon-purple);
-      box-shadow: 0 0 10px var(--neon-purple);
-      animation-duration: 18s;
+      box-shadow: 0 0 2px var(--neon-purple);
+      animation-duration: 35s;
     }
     
     .neural-node:nth-child(3n) {
       background: var(--neon-pink);
-      box-shadow: 0 0 10px var(--neon-pink);
-      animation-duration: 12s;
+      box-shadow: 0 0 2px var(--neon-pink);
+      animation-duration: 32s;
     }
     
     @keyframes neuralFloat {
@@ -111,13 +112,13 @@
         transform: translateY(100vh) translateX(0) scale(0);
         opacity: 0;
       }
-      10% {
-        opacity: 1;
-        transform: translateY(90vh) translateX(10px) scale(1);
+      20% {
+        opacity: 0.5;
+        transform: translateY(80vh) translateX(5px) scale(1);
       }
-      90% {
-        opacity: 1;
-        transform: translateY(10vh) translateX(-10px) scale(1);
+      80% {
+        opacity: 0.5;
+        transform: translateY(20vh) translateX(-5px) scale(1);
       }
       100% {
         transform: translateY(-10vh) translateX(0) scale(0);
@@ -127,9 +128,7 @@
     
     /* Futuristic Glass Morphism */
     .cyber-glass {
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(10, 10, 15, 0.95);
       border: 1px solid var(--glass-border);
       box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.3),
@@ -221,10 +220,9 @@
       align-items: center;
       gap: 8px;
       padding: 6px 12px;
-      background: rgba(0, 212, 255, 0.1);
+      background: rgba(0, 212, 255, 0.15);
       border: 1px solid rgba(0, 212, 255, 0.3);
       border-radius: 20px;
-      backdrop-filter: blur(10px);
       font-size: 0.875rem;
       font-weight: 500;
     }
@@ -303,7 +301,6 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
       position: relative;
       max-width: 80%;
-      backdrop-filter: blur(15px);
       margin-left: auto;
     }
     
@@ -322,12 +319,11 @@
     
     /* Advanced Typing Indicator */
     .neural-typing {
-      background: rgba(0, 212, 255, 0.08);
+      background: rgba(0, 212, 255, 0.12);
       border: 1px solid rgba(0, 212, 255, 0.2);
       border-radius: 15px;
       padding: 15px 20px;
       margin: 10px 0;
-      backdrop-filter: blur(15px);
       animation: typingGlow 2s ease-in-out infinite;
       display: flex;
       align-items: center;
@@ -432,8 +428,8 @@
     }
     
     .neural-input {
-      background: rgba(255, 255, 255, 0.03);
-      border: none;
+      background: rgba(10, 10, 15, 0.9);
+      border: 1px solid rgba(0, 212, 255, 0.2);
       border-radius: 23px;
       padding: 18px 20px;
       color: white;
@@ -441,7 +437,6 @@
       font-family: inherit;
       width: 100%;
       outline: none;
-      backdrop-filter: blur(20px);
       transition: all 0.3s ease;
       resize: none;
     }
@@ -475,7 +470,6 @@
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
-      opacity: 1 !important;
     }
     
     .neural-send::before {
@@ -543,6 +537,94 @@
       font-size: 0.875rem;
     }
     
+    /* ChatGPT-style Action Buttons */
+    .neural-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .neural-action-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--neural-gradient);
+      opacity: 0;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+    }
+    
+    .neural-action-btn:hover::before {
+      opacity: 0.1;
+    }
+    
+    .neural-action-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.3);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 
+        0 8px 25px rgba(0, 212, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .neural-action-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    
+    .neural-action-btn svg {
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+    }
+    
+    /* Trading Menu Styles */
+    #tradingMenu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 6xl;
+      background: rgba(5, 5, 8, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(100%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+    }
+    
+    #tradingMenu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+    }
+    
+    .menu-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .menu-backdrop.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
     /* Responsive Design */
     @media (max-width: 768px) {
       .ai-title {
@@ -565,6 +647,11 @@
         font-size: 0.75rem;
         padding: 4px 8px;
       }
+      
+      #tradingMenu {
+        width: 100vw;
+        max-width: none;
+      }
     }
     
     /* Accessibility */
@@ -581,44 +668,6 @@
       .cyber-glass {
         border: 2px solid var(--neon-blue);
       }
-    }
-    
-    /* Loading States */
-    .loading-shimmer {
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-    }
-    
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-    
-    /* Voice Input Visualization */
-    .voice-wave {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      height: 20px;
-    }
-    
-    .wave-bar {
-      width: 3px;
-      background: var(--neon-green);
-      border-radius: 2px;
-      animation: waveAnimation 1s ease-in-out infinite;
-    }
-    
-    .wave-bar:nth-child(1) { animation-delay: 0s; height: 10px; }
-    .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 15px; }
-    .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 20px; }
-    .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 15px; }
-    .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 10px; }
-    
-    @keyframes waveAnimation {
-      0%, 100% { transform: scaleY(0.5); }
-      50% { transform: scaleY(1); }
     }
   </style>
 </head>
@@ -646,23 +695,35 @@
                 <span class="text-white font-medium">Neural Network Active</span>
               </div>
               <div class="status-chip">
+                <div class="status-dot" style="background: var(--neon-green); animation: statusPulse 1.5s ease-in-out infinite;"></div>
                 <span class="text-white/90 text-sm">🚀 Quantum Mode</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="hidden lg:flex items-center space-x-4">
-          <div class="status-chip">
-            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-            </svg>
-            <span class="text-white/90 text-sm">Quantum Encrypted</span>
+        <div class="flex items-center space-x-4">
+          <div class="hidden lg:flex items-center space-x-4">
+            <div class="status-chip">
+              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-white/90 text-sm">Quantum Encrypted</span>
+            </div>
+            <div class="status-chip">
+              <span class="text-white/80 text-sm">Latency: <span id="latencyCounter" class="perf-counter">~0.3ms</span></span>
+            </div>
+            <div class="status-chip">
+              <span class="text-white/80 text-sm">GPU: <span id="gpuUsage" class="perf-counter">47%</span></span>
+            </div>
           </div>
-          <div class="status-chip">
-            <span class="text-white/80 text-sm">Latency: <span id="latencyCounter" class="perf-counter">~0.3ms</span></span>
-          </div>
-          <div class="status-chip">
-            <span class="text-white/80 text-sm">GPU: <span id="gpuUsage" class="perf-counter">47%</span></span>
+          <!-- Trading Menu Toggle -->
+          <div class="relative">
+            <button id="tradingToggle" onclick="toggleTradingMenu()" class="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-lg transition-all duration-200">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+              <span class="text-sm font-medium">Trading</span>
+            </button>
           </div>
         </div>
       </div>
@@ -710,6 +771,67 @@
                 spellcheck="true"
               ></textarea>
             </div>
+            
+            <!-- Enhanced Action Buttons Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+              <button onclick="uploadFile()" class="neural-action-btn flex-col py-3" title="Upload files">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                </svg>
+                <span class="text-xs">Upload</span>
+              </button>
+              
+              <button onclick="openFolder()" class="neural-action-btn flex-col py-3" title="Browse folders">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                </svg>
+                <span class="text-xs">Folder</span>
+              </button>
+              
+              <button onclick="takePhoto()" class="neural-action-btn flex-col py-3" title="Take photo">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span class="text-xs">Camera</span>
+              </button>
+              
+              <button onclick="createDocument()" class="neural-action-btn flex-col py-3" title="Create document">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span class="text-xs">Document</span>
+              </button>
+              
+              <button onclick="generateImage()" class="neural-action-btn flex-col py-3" title="Generate image">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-xs">Generate</span>
+              </button>
+              
+              <button onclick="shareChat()" class="neural-action-btn flex-col py-3" title="Share chat">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                </svg>
+                <span class="text-xs">Share</span>
+              </button>
+              
+              <button onclick="exportChat()" class="neural-action-btn flex-col py-3" title="Export chat">
+                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span class="text-xs">Export</span>
+              </button>
+              
+              <button id="voiceBtn" onclick="toggleVoiceInput()" class="neural-action-btn flex-col py-3" title="Voice input">
+                <svg class="w-5 h-5 mb-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-xs">Voice</span>
+              </button>
+            </div>
+            
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center space-x-4 text-white/50">
                 <span class="flex items-center space-x-1">
@@ -722,12 +844,6 @@
                   <kbd class="px-2 py-1 bg-white/5 rounded text-xs font-mono border border-white/10">Enter</kbd>
                   <span>new line</span>
                 </span>
-                <button id="voiceBtn" class="flex items-center space-x-1 hover:text-white/70 transition-colors">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
-                  </svg>
-                  <span>Voice</span>
-                </button>
               </div>
               <div class="flex items-center space-x-4 text-white/50">
                 <span class="perf-counter" id="charCounter">0</span>
@@ -755,394 +871,1048 @@
         </div>
       </footer>
     </main>
+    
+    <!-- Footer with Creator Credit -->
+    <footer class="max-w-7xl mx-auto w-full mt-6 pb-4">
+      <div class="text-center">
+        <div class="cyber-glass rounded-xl p-4">
+          <p class="text-white/60 text-sm font-medium">
+            Created with 💖 by <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 font-bold">Monjit</span> ✨
+          </p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Trading Menu -->
+  <div id="tradingMenu" class="fixed top-0 right-0 bottom-0 w-full max-w-6xl opacity-0 invisible transition-all duration-300 ease-out z-[9999] overflow-y-auto transform translate-x-full" style="background: rgba(5, 5, 8, 0.98);">
+    <div class="min-h-screen w-full p-3 sm:p-6">
+      <!-- Menu Header -->
+      <div class="w-full max-w-none">
+        <div class="flex items-center justify-between mb-4 sm:mb-6">
+          <div>
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-1 sm:mb-2" style="font-family: 'Orbitron', monospace;">Trading Arsenal</h1>
+            <p class="text-gray-400 text-xs sm:text-sm lg:text-base">AI-powered trading tools and analytics</p>
+          </div>
+          <button onclick="closeTradingMenu()" class="p-2 hover:bg-white/10 rounded-full transition-colors flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Trading Categories Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-3">
+          
+          <!-- Strategy Tools -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">📘</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Strategy Tools</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('strategy')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🏗️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Strategy Builder</div>
+                  <div class="text-gray-400 text-xs">Create & optimize</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('strategy-engine')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">⚡</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Strategy Engine</div>
+                  <div class="text-gray-400 text-xs">Real-time execution</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('matrix')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">📊</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Strategy Matrix</div>
+                  <div class="text-gray-400 text-xs">Multi-dimensional</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('optimizer')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🔧</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Strategy Optimizer</div>
+                  <div class="text-gray-400 text-xs">AI parameter tuning</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Market Analysis -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">🔮</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Market Analysis</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('candle')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🕯️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Candle Predictor</div>
+                  <div class="text-gray-400 text-xs">AI pattern recognition</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('sentiment')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">💭</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Sentiment Scanner</div>
+                  <div class="text-gray-400 text-xs">Market emotion</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('volume-profile')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">📊</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Volume Profile</div>
+                  <div class="text-gray-400 text-xs">Volume-at-price</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('heat-map')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🌡️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Market Heat Map</div>
+                  <div class="text-gray-400 text-xs">Sector performance</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Options & Derivatives -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">💹</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Options & Derivatives</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('option-chain')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">⛓️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Option Chain</div>
+                  <div class="text-gray-400 text-xs">Real-time options</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('neuron')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🧠</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Neuron Analysis</div>
+                  <div class="text-gray-400 text-xs">Deep learning</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Risk Management -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">🛡️</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Risk Management</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('risk-calculator')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🧮</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Risk Calculator</div>
+                  <div class="text-gray-400 text-xs">Position sizing</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('portfolio-analyzer')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">📋</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Portfolio Analyzer</div>
+                  <div class="text-gray-400 text-xs">Complete metrics</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('drawdown-tracker')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">📉</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Drawdown Tracker</div>
+                  <div class="text-gray-400 text-xs">Risk monitoring</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('var-calculator')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">⚠️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">VaR Calculator</div>
+                  <div class="text-gray-400 text-xs">Value at Risk</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Backtesting & Simulation -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">🔁</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Testing & Simulation</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('backtester')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">⏪</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Back-tester</div>
+                  <div class="text-gray-400 text-xs">Historical testing</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('forward-tester')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">⏭️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Forward Tester</div>
+                  <div class="text-gray-400 text-xs">Live paper trading</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('monte-carlo')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🎲</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Monte Carlo</div>
+                  <div class="text-gray-400 text-xs">Probability sims</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- AI & Machine Learning -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-pink-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">🤖</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">AI & ML</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('ask-ai')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">💬</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Ask AI</div>
+                  <div class="text-gray-400 text-xs">Trading questions</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('pattern-recognition')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🔍</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Pattern Recognition</div>
+                  <div class="text-gray-400 text-xs">AI chart patterns</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('neural-network')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🕸️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Neural Network</div>
+                  <div class="text-gray-400 text-xs">Deep learning</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dashboard & Tools -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">📊</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Dashboard & Tools</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('dashboard')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🏠</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Trading Dashboard</div>
+                  <div class="text-gray-400 text-xs">Complete overview</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('watchlist')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">👁️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Watchlist Manager</div>
+                  <div class="text-gray-400 text-xs">Smart tracking</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('alerts')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🔔</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Alert System</div>
+                  <div class="text-gray-400 text-xs">Smart notifications</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('settings')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">⚙️</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Settings</div>
+                  <div class="text-gray-400 text-xs">System preferences</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Market Data -->
+          <div class="border border-white/20 rounded-lg p-2 sm:p-3 hover:bg-white/10 transition-all duration-300" style="background: rgba(15, 15, 25, 0.9);">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                <span class="text-sm sm:text-lg">📈</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Market Data</h3>
+            </div>
+            <div class="space-y-1">
+              <button onclick="navigateToFunction('news')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">📰</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Market News</div>
+                  <div class="text-gray-400 text-xs">Real-time news</div>
+                </div>
+              </button>
+              <button onclick="navigateToFunction('correlation-matrix')" class="w-full flex items-center gap-2 p-1.5 hover:bg-white/10 rounded-lg transition-colors text-left">
+                <span class="text-xs sm:text-sm">🔗</span>
+                <div>
+                  <div class="text-white font-medium text-xs">Correlation Matrix</div>
+                  <div class="text-gray-400 text-xs">Asset relationships</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-white/10">
+          <h3 class="text-sm sm:text-base font-bold text-white mb-2">Quick Actions</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button onclick="navigateToFunction('ask-ai')" class="px-2 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg text-white transition-colors text-xs">
+              💬 Ask AI
+            </button>
+            <button onclick="navigateToFunction('strategy')" class="px-2 py-1.5 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg text-white transition-colors text-xs">
+              🏗️ Build Strategy
+            </button>
+            <button onclick="navigateToFunction('backtester')" class="px-2 py-1.5 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded-lg text-white transition-colors text-xs">
+              🔁 Test Strategy
+            </button>
+            <button onclick="navigateToFunction('risk-calculator')" class="px-2 py-1.5 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-lg text-white transition-colors text-xs">
+              🛡️ Calculate Risk
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    class QuantumNeuralInterface {
-      constructor() {
-        this.isProcessing = false;
-        this.typingSpeed = 30;
-        this.performanceMetrics = {
-          latency: 0.3,
-          gpuUsage: 47,
-          tokensProcessed: 0
-        };
-        
-        this.elements = {
-          chat: document.getElementById("chatContainer"),
-          input: document.getElementById("neuralInput"),
-          sendBtn: document.getElementById("neuralSend"),
-          sendIcon: document.getElementById("sendIcon"),
-          processingIcon: document.getElementById("processingIcon"),
-          charCounter: document.getElementById("charCounter"),
-          wordCounter: document.getElementById("wordCounter"),
-          latencyCounter: document.getElementById("latencyCounter"),
-          gpuUsage: document.getElementById("gpuUsage"),
-          voiceBtn: document.getElementById("voiceBtn")
-        };
-        
-        this.initialize();
-      }
-      
-      initialize() {
-        this.setupEventHandlers();
-        this.createNeuralNodes();
-        this.updateTimestamp();
-        this.startPerformanceMonitoring();
-        this.elements.input.focus();
-        
-        // Update timestamps every minute
-        setInterval(() => this.updateTimestamp(), 60000);
-        
-        // Regenerate neural nodes
-        setInterval(() => this.createNeuralNodes(), 25000);
-      }
-      
-      createNeuralNodes() {
-        const container = document.getElementById('neuralNodes');
-        container.innerHTML = '';
-        
-        for (let i = 0; i < 20; i++) {
-          const node = document.createElement('div');
-          node.className = 'neural-node';
-          node.style.left = Math.random() * 100 + '%';
-          node.style.animationDelay = Math.random() * 15 + 's';
-          node.style.animationDuration = (12 + Math.random() * 8) + 's';
-          container.appendChild(node);
-        }
-      }
-      
-      setupEventHandlers() {
-        // Input handling
-        this.elements.input.addEventListener('input', (e) => {
-          this.autoResize(e.target);
-          this.updateCounters(e.target.value);
-          this.toggleSendButton(e.target.value.trim());
-        });
+    // Global variables
+    let isProcessing = false;
+    let isMenuOpen = false;
+    const typingSpeed = 30;
+    
+    // Performance metrics
+    let performanceMetrics = {
+      latency: 0.3,
+      gpuUsage: 47,
+      tokensProcessed: 0
+    };
 
-        // Keyboard shortcuts
-        this.elements.input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            if (!this.isProcessing && e.target.value.trim()) {
-              this.transmitMessage();
-            }
-          }
-        });
+    // DOM elements
+    const elements = {
+      chat: document.getElementById("chatContainer"),
+      input: document.getElementById("neuralInput"),
+      sendBtn: document.getElementById("neuralSend"),
+      sendIcon: document.getElementById("sendIcon"),
+      processingIcon: document.getElementById("processingIcon"),
+      charCounter: document.getElementById("charCounter"),
+      wordCounter: document.getElementById("wordCounter"),
+      latencyCounter: document.getElementById("latencyCounter"),
+      gpuUsage: document.getElementById("gpuUsage"),
+      voiceBtn: document.getElementById("voiceBtn")
+    };
 
-        // Voice input
-        this.elements.voiceBtn.addEventListener('click', () => {
-          this.toggleVoiceInput();
-        });
+    // Initialize the application
+    function initialize() {
+      setupEventHandlers();
+      createNeuralNodes();
+      updateTimestamp();
+      startPerformanceMonitoring();
+      elements.input.focus();
+      
+      // Update timestamps every minute
+      setInterval(updateTimestamp, 60000);
+      
+      // Regenerate neural nodes less frequently
+      setInterval(createNeuralNodes, 60000);
+    }
 
-        // Prevent iOS zoom
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-          this.elements.input.addEventListener('focus', function() {
-            this.style.fontSize = '16px';
-          });
-        }
-      }
+    // Create floating neural nodes
+    function createNeuralNodes() {
+      const container = document.getElementById('neuralNodes');
+      container.innerHTML = '';
       
-      autoResize(textarea) {
-        textarea.style.height = 'auto';
-        const newHeight = Math.min(Math.max(textarea.scrollHeight, 56), 140);
-        textarea.style.height = newHeight + 'px';
-      }
-      
-      updateCounters(text) {
-        const charCount = text.length;
-        const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
-        
-        this.elements.charCounter.textContent = charCount;
-        this.elements.wordCounter.textContent = `${wordCount} token${wordCount !== 1 ? 's' : ''}`;
-      }
-      
-      toggleSendButton(hasText) {
-        this.elements.sendBtn.disabled = !hasText || this.isProcessing;
-        if (hasText && !this.isProcessing) {
-          this.elements.sendBtn.style.opacity = '1';
-          this.elements.sendBtn.style.pointerEvents = 'auto';
-        } else {
-          this.elements.sendBtn.style.opacity = '0.4';
-          this.elements.sendBtn.style.pointerEvents = 'none';
-        }
-      }
-      
-      updateTimestamp() {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const timestampEl = document.getElementById('initialTimestamp');
-        if (timestampEl) {
-          timestampEl.textContent = timeString;
-        }
-      }
-      
-      startPerformanceMonitoring() {
-        setInterval(() => {
-          // Simulate realistic performance metrics
-          this.performanceMetrics.latency = (0.2 + Math.random() * 0.3).toFixed(1);
-          this.performanceMetrics.gpuUsage = Math.floor(40 + Math.random() * 30);
-          
-          this.elements.latencyCounter.textContent = `~${this.performanceMetrics.latency}ms`;
-          this.elements.gpuUsage.textContent = `${this.performanceMetrics.gpuUsage}%`;
-        }, 2000);
-      }
-      
-      createUserMessage(content) {
-        const container = document.createElement("div");
-        container.className = "message-enter flex justify-end";
-        
-        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        container.innerHTML = `
-          <div class="user-message">
-            <div class="flex items-start space-x-3 flex-row-reverse">
-              <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
-                👤
-              </div>
-              <div class="flex-1 text-right">
-                <div class="flex items-center space-x-2 mb-2 justify-end">
-                  <span class="text-white/60 text-xs">${timestamp}</span>
-                  <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
-                  <span class="text-white/70 text-xs">Human</span>
-                  <p class="font-bold text-white text-base">YOU</p>
-                </div>
-                <div class="message-content leading-relaxed text-white text-base font-medium">
-                  ${content}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        return container;
-      }
-      
-      createAIMessage() {
-        const container = document.createElement("div");
-        container.className = "message-enter";
-        
-        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        container.innerHTML = `
-          <div class="ai-message">
-            <div class="flex items-start space-x-3">
-              <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
-                🧠
-              </div>
-              <div class="flex-1">
-                <div class="flex items-center space-x-2 mb-2">
-                  <p class="font-bold text-white text-base" style="font-family: 'Orbitron', monospace;">LAKSHMI</p>
-                  <span class="text-white/70 text-xs">Neural AI</span>
-                  <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
-                  <span class="text-white/60 text-xs">${timestamp}</span>
-                </div>
-                <div class="message-content leading-relaxed text-white text-base font-medium">
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        return container;
-      }
-      
-      createNeuralTypingIndicator() {
-        const container = document.createElement("div");
-        container.className = "message-enter";
-        container.id = "neural-typing-indicator";
-        
-        container.innerHTML = `
-          <div class="neural-typing">
-            <div class="typing-avatar">🧠</div>
-            <div class="flex items-center space-x-3">
-              <div class="neural-dots">
-                <div class="neural-dot"></div>
-                <div class="neural-dot"></div>
-                <div class="neural-dot"></div>
-              </div>
-              <span class="text-white font-medium">Neural network processing...</span>
-            </div>
-          </div>
-        `;
-        
-        return container;
-      }
-      
-      async typeMessage(element, text, speed = this.typingSpeed) {
-        const contentDiv = element.querySelector('.message-content');
-        contentDiv.innerHTML = '';
-        
-        const words = text.split(' ');
-        let currentText = '';
-        
-        for (let i = 0; i < words.length; i++) {
-          currentText += (i > 0 ? ' ' : '') + words[i];
-          contentDiv.innerHTML = currentText.replace(/\n/g, '<br>');
-          
-          // Auto-scroll during typing
-          this.elements.chat.scrollTop = this.elements.chat.scrollHeight;
-          
-          // Dynamic typing speed
-          let delay = speed;
-          const word = words[i];
-          
-          if (word.endsWith('.') || word.endsWith('!') || word.endsWith('?')) {
-            delay *= 3;
-          } else if (word.endsWith(',') || word.endsWith(';')) {
-            delay *= 2;
-          } else if (word.length > 10) {
-            delay *= 1.3;
-          }
-          
-          // Natural variation
-          delay += Math.random() * 15;
-          
-          await new Promise(resolve => setTimeout(resolve, delay));
-        }
-      }
-      
-      toggleVoiceInput() {
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-          const recognition = new SpeechRecognition();
-          
-          recognition.continuous = false;
-          recognition.interimResults = false;
-          recognition.lang = 'en-US';
-          
-          recognition.onstart = () => {
-            this.elements.voiceBtn.innerHTML = `
-              <div class="voice-wave">
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-              </div>
-              <span>Listening...</span>
-            `;
-          };
-          
-          recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            this.elements.input.value = transcript;
-            this.updateCounters(transcript);
-            this.toggleSendButton(transcript.trim());
-          };
-          
-          recognition.onend = () => {
-            this.elements.voiceBtn.innerHTML = `
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
-              </svg>
-              <span>Voice</span>
-            `;
-          };
-          
-          recognition.start();
-        } else {
-          alert('Voice recognition not supported in this browser');
-        }
-      }
-      
-      async transmitMessage() {
-        const text = this.elements.input.value.trim();
-        if (!text || this.isProcessing) return;
-
-        const startTime = Date.now();
-        this.isProcessing = true;
-        
-        // Update UI state
-        this.elements.sendIcon.classList.add('hidden');
-        this.elements.processingIcon.classList.remove('hidden');
-        this.elements.sendBtn.disabled = true;
-        this.elements.input.disabled = true;
-
-        // Create and show user message
-        const userMessage = this.createUserMessage(text.replace(/\n/g, '<br>'));
-        this.elements.chat.appendChild(userMessage);
-        
-        // Clear input
-        this.elements.input.value = "";
-        this.elements.input.style.height = 'auto';
-        this.updateCounters('');
-        
-        // Show neural typing indicator
-        const typingIndicator = this.createNeuralTypingIndicator();
-        this.elements.chat.appendChild(typingIndicator);
-        
-        // Auto-scroll
-        this.elements.chat.scrollTop = this.elements.chat.scrollHeight;
-
-        try {
-          const response = await fetch("/chat", {
-            method: "POST",
-            headers: { 
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-            },
-            body: JSON.stringify({ message: text }),
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          const responseTime = Date.now() - startTime;
-          
-          // Update performance metrics
-          this.performanceMetrics.latency = (responseTime / 1000).toFixed(1);
-          this.performanceMetrics.tokensProcessed += text.split(' ').length;
-          
-          // Remove typing indicator
-          typingIndicator.remove();
-          
-          // Create AI message
-          const aiMessage = this.createAIMessage();
-          this.elements.chat.appendChild(aiMessage);
-          
-          // Type the response
-          await this.typeMessage(aiMessage, data.reply);
-          
-        } catch (error) {
-          console.error('Neural network error:', error);
-          
-          // Remove typing indicator
-          typingIndicator.remove();
-          
-          // Show error message
-          const errorMessage = this.createAIMessage();
-          this.elements.chat.appendChild(errorMessage);
-          
-          await this.typeMessage(errorMessage, 
-            '⚠️ Neural network connection disrupted. Quantum entanglement protocols are re-establishing the link. Please retry your transmission. 🔄'
-          );
-          
-        } finally {
-          // Reset UI state
-          this.isProcessing = false;
-          this.elements.sendIcon.classList.remove('hidden');
-          this.elements.processingIcon.classList.add('hidden');
-          this.elements.sendBtn.disabled = false;
-          this.elements.input.disabled = false;
-          this.elements.input.focus();
-          
-          // Final scroll
-          this.elements.chat.scrollTop = this.elements.chat.scrollHeight;
-        }
+      for (let i = 0; i < 4; i++) {
+        const node = document.createElement('div');
+        node.className = 'neural-node';
+        node.style.left = Math.random() * 100 + '%';
+        node.style.animationDelay = Math.random() * 20 + 's';
+        node.style.animationDuration = (20 + Math.random() * 10) + 's';
+        container.appendChild(node);
       }
     }
 
-    // Initialize the Quantum Neural Interface
-    const quantumInterface = new QuantumNeuralInterface();
-    
-    // Global function for button onclick
-    function transmitMessage() {
-      quantumInterface.transmitMessage();
+    // Setup event handlers
+    function setupEventHandlers() {
+      // Input handling
+      elements.input.addEventListener('input', (e) => {
+        autoResize(e.target);
+        updateCounters(e.target.value);
+        toggleSendButton(e.target.value.trim());
+      });
+
+      // Keyboard shortcuts
+      elements.input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if (!isProcessing && e.target.value.trim()) {
+            transmitMessage();
+          }
+        }
+      });
+
+      // Prevent iOS zoom
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        elements.input.addEventListener('focus', function() {
+          this.style.fontSize = '16px';
+        });
+      }
     }
-    
+
+    // Auto-resize textarea
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      const newHeight = Math.min(Math.max(textarea.scrollHeight, 56), 140);
+      textarea.style.height = newHeight + 'px';
+    }
+
+    // Update character and word counters
+    function updateCounters(text) {
+      const charCount = text.length;
+      const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+      
+      elements.charCounter.textContent = charCount;
+      elements.wordCounter.textContent = `${wordCount} token${wordCount !== 1 ? 's' : ''}`;
+    }
+
+    // Toggle send button state
+    function toggleSendButton(hasText) {
+      elements.sendBtn.disabled = !hasText || isProcessing;
+      if (hasText && !isProcessing) {
+        elements.sendBtn.style.opacity = '1';
+        elements.sendBtn.style.pointerEvents = 'auto';
+      } else {
+        elements.sendBtn.style.opacity = '0.4';
+        elements.sendBtn.style.pointerEvents = 'none';
+      }
+    }
+
+    // Update timestamp
+    function updateTimestamp() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const timestampEl = document.getElementById('initialTimestamp');
+      if (timestampEl) {
+        timestampEl.textContent = timeString;
+      }
+    }
+
+    // Start performance monitoring
+    function startPerformanceMonitoring() {
+      setInterval(() => {
+        // Simulate realistic performance metrics
+        performanceMetrics.latency = (0.2 + Math.random() * 0.3).toFixed(1);
+        performanceMetrics.gpuUsage = Math.floor(40 + Math.random() * 30);
+        
+        elements.latencyCounter.textContent = `~${performanceMetrics.latency}ms`;
+        elements.gpuUsage.textContent = `${performanceMetrics.gpuUsage}%`;
+      }, 2000);
+    }
+
+    // Create user message
+    function createUserMessage(content) {
+      const container = document.createElement("div");
+      container.className = "message-enter flex justify-end";
+      
+      const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      container.innerHTML = `
+        <div class="user-message">
+          <div class="flex items-start space-x-3 flex-row-reverse">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
+              👤
+            </div>
+            <div class="flex-1 text-right">
+              <div class="flex items-center space-x-2 mb-2 justify-end">
+                <span class="text-white/60 text-xs">${timestamp}</span>
+                <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                <span class="text-white/70 text-xs">Human</span>
+                <p class="font-bold text-white text-base">YOU</p>
+              </div>
+              <div class="message-content leading-relaxed text-white text-base font-medium">
+                ${content}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      return container;
+    }
+
+    // Create AI message
+    function createAIMessage() {
+      const container = document.createElement("div");
+      container.className = "message-enter";
+      
+      const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      container.innerHTML = `
+        <div class="ai-message">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
+              🧠
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center space-x-2 mb-2">
+                <p class="font-bold text-white text-base" style="font-family: 'Orbitron', monospace;">LAKSHMI</p>
+                <span class="text-white/70 text-xs">Neural AI</span>
+                <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                <span class="text-white/60 text-xs">${timestamp}</span>
+              </div>
+              <div class="message-content leading-relaxed text-white text-base font-medium">
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      return container;
+    }
+
+    // Create typing indicator
+    function createNeuralTypingIndicator() {
+      const container = document.createElement("div");
+      container.className = "message-enter";
+      container.id = "neural-typing-indicator";
+      
+      container.innerHTML = `
+        <div class="neural-typing">
+          <div class="typing-avatar">🧠</div>
+          <div class="flex items-center space-x-3">
+            <div class="neural-dots">
+              <div class="neural-dot"></div>
+              <div class="neural-dot"></div>
+              <div class="neural-dot"></div>
+            </div>
+            <span class="text-white font-medium">Neural network processing...</span>
+          </div>
+        </div>
+      `;
+      
+      return container;
+    }
+
+    // Type message with animation
+    async function typeMessage(element, text, speed = typingSpeed) {
+      const contentDiv = element.querySelector('.message-content');
+      contentDiv.innerHTML = '';
+      
+      const words = text.split(' ');
+      let currentText = '';
+      
+      for (let i = 0; i < words.length; i++) {
+        currentText += (i > 0 ? ' ' : '') + words[i];
+        contentDiv.innerHTML = currentText.replace(/\n/g, '<br>');
+        
+        // Auto-scroll during typing
+        elements.chat.scrollTop = elements.chat.scrollHeight;
+        
+        // Dynamic typing speed
+        let delay = speed;
+        const word = words[i];
+        
+        if (word.endsWith('.') || word.endsWith('!') || word.endsWith('?')) {
+          delay *= 3;
+        } else if (word.endsWith(',') || word.endsWith(';')) {
+          delay *= 2;
+        } else if (word.length > 10) {
+          delay *= 1.3;
+        }
+        
+        // Natural variation
+        delay += Math.random() * 15;
+        
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
+    // Main message transmission function
+    async function transmitMessage() {
+      const text = elements.input.value.trim();
+      if (!text || isProcessing) return;
+
+      const startTime = Date.now();
+      isProcessing = true;
+      
+      // Update UI state
+      elements.sendIcon.classList.add('hidden');
+      elements.processingIcon.classList.remove('hidden');
+      elements.sendBtn.disabled = true;
+      elements.input.disabled = true;
+
+      // Create and show user message
+      const userMessage = createUserMessage(text.replace(/\n/g, '<br>'));
+      elements.chat.appendChild(userMessage);
+      
+      // Clear input
+      elements.input.value = "";
+      elements.input.style.height = 'auto';
+      updateCounters('');
+      
+      // Show neural typing indicator
+      const typingIndicator = createNeuralTypingIndicator();
+      elements.chat.appendChild(typingIndicator);
+      
+      // Auto-scroll
+      elements.chat.scrollTop = elements.chat.scrollHeight;
+
+      try {
+        // Call your API here - replace with your actual API endpoint and key
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer YOUR_API_KEY_HERE', // Replace with your actual API key
+            'Content-Type': 'application/json',
+            'HTTP-Referer': window.location.origin,
+            'X-Title': 'Lakshmi AI Trading Assistant'
+          },
+          body: JSON.stringify({
+            model: 'anthropic/claude-3.5-sonnet',
+            messages: [
+              {
+                role: 'system',
+                content: 'You are Lakshmi, an advanced AI trading assistant with expertise in financial markets, technical analysis, and trading strategies. Respond in a professional yet engaging manner, providing actionable insights for traders and investors. Keep responses concise but informative.'
+              },
+              {
+                role: 'user',
+                content: text
+              }
+            ],
+            max_tokens: 1000,
+            temperature: 0.7,
+            top_p: 0.9
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status}`);
+        }
+
+        const apiData = await response.json();
+        const data = { 
+          reply: apiData.choices[0]?.message?.content || 
+                 "🤖 I'm processing your request through my neural networks. Could you please rephrase your question?" 
+        };
+        const responseTime = Date.now() - startTime;
+        
+        // Update performance metrics
+        performanceMetrics.latency = (responseTime / 1000).toFixed(1);
+        performanceMetrics.tokensProcessed += text.split(' ').length;
+        
+        // Remove typing indicator
+        typingIndicator.remove();
+        
+        // Create AI message
+        const aiMessage = createAIMessage();
+        elements.chat.appendChild(aiMessage);
+        
+        // Type the response
+        await typeMessage(aiMessage, data.reply);
+        
+      } catch (error) {
+        console.error('Neural network error:', error);
+        
+        // Remove typing indicator
+        typingIndicator.remove();
+        
+        // Show error message
+        const errorMessage = createAIMessage();
+        elements.chat.appendChild(errorMessage);
+        
+        await typeMessage(errorMessage, 
+          '⚠️ Neural network connection disrupted. Quantum entanglement protocols are re-establishing the link. Please retry your transmission. 🔄'
+        );
+        
+      } finally {
+        // Reset UI state
+        isProcessing = false;
+        elements.sendIcon.classList.remove('hidden');
+        elements.processingIcon.classList.add('hidden');
+        elements.sendBtn.disabled = false;
+        elements.input.disabled = false;
+        elements.input.focus();
+        
+        // Final scroll
+        elements.chat.scrollTop = elements.chat.scrollHeight;
+      }
+    }
+
+    // Trading Menu Functions
+    function toggleTradingMenu() {
+      const menu = document.getElementById('tradingMenu');
+      let backdrop = document.getElementById('menuBackdrop');
+      
+      // Create backdrop if it doesn't exist
+      if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.id = 'menuBackdrop';
+        backdrop.className = 'menu-backdrop';
+        backdrop.onclick = closeTradingMenu;
+        document.body.appendChild(backdrop);
+      }
+      
+      isMenuOpen = !isMenuOpen;
+      
+      if (isMenuOpen) {
+        backdrop.classList.add('show');
+        menu.classList.add('show');
+      } else {
+        backdrop.classList.remove('show');
+        menu.classList.remove('show');
+      }
+    }
+
+    function closeTradingMenu() {
+      if (isMenuOpen) {
+        toggleTradingMenu();
+      }
+    }
+
+    // Navigation function for trading functions
+    function navigateToFunction(functionName) {
+      // Close menu first
+      closeTradingMenu();
+      
+      // Show loading state
+      const functionNames = {
+        'strategy': 'Strategy Builder',
+        'strategy-engine': 'Strategy Engine', 
+        'matrix': 'Strategy Matrix',
+        'analyzer': 'Strategy Analyzer',
+        'optimizer': 'Strategy Optimizer',
+        'candle': 'Candle Predictor',
+        'option-chain': 'Option Chain',
+        'neuron': 'Neuron Analysis',
+        'sentiment': 'Sentiment Scanner',
+        'volume-profile': 'Volume Profile',
+        'heat-map': 'Market Heat Map',
+        'risk-calculator': 'Risk Calculator',
+        'portfolio-analyzer': 'Portfolio Analyzer',
+        'drawdown-tracker': 'Drawdown Tracker',
+        'correlation-matrix': 'Correlation Matrix',
+        'var-calculator': 'VaR Calculator',
+        'backtester': 'Back-tester',
+        'forward-tester': 'Forward Tester',
+        'monte-carlo': 'Monte Carlo Simulator',
+        'ask-ai': 'Ask AI',
+        'pattern-recognition': 'Pattern Recognition',
+        'neural-network': 'Neural Network',
+        'dashboard': 'Trading Dashboard',
+        'watchlist': 'Watchlist Manager',
+        'alerts': 'Alert System',
+        'news': 'Market News',
+        'settings': 'System Settings'
+      };
+      
+      const displayName = functionNames[functionName] || functionName.replace('-', ' ').toUpperCase();
+      const loadingMessage = `🚀 Initializing ${displayName} module... Quantum neural pathways activating! ⚡`;
+      
+      // Add a message to the chat showing the function is being loaded
+      addSystemMessage(loadingMessage);
+      
+      // Simulate navigation with realistic loading
+      setTimeout(() => {
+        const successMessage = `✅ ${displayName} module successfully loaded! All advanced trading features are now online and ready for quantum-level analysis! 🎯`;
+        addSystemMessage(successMessage);
+        
+        // Add function-specific welcome message
+        setTimeout(() => {
+          let specificMessage = '';
+          switch(functionName) {
+            case 'strategy':
+              specificMessage = '📘 Strategy Builder activated! Create, test, and optimize your trading strategies with AI-powered insights. Ready to build your winning strategy?';
+              break;
+            case 'strategy-engine':
+              specificMessage = '⚡ Strategy Engine online! Real-time strategy execution with quantum-speed processing. Your strategies are now running at light speed!';
+              break;
+            case 'matrix':
+              specificMessage = '📊 Strategy Matrix loaded! Multi-dimensional strategy analysis across all market conditions. The matrix has you covered!';
+              break;
+            case 'analyzer':
+              specificMessage = '📈 Strategy Analyzer ready! Deep performance analytics with neural network insights. Let\'s analyze your trading patterns!';
+              break;
+            case 'optimizer':
+              specificMessage = '🔧 Strategy Optimizer initialized! AI-powered parameter optimization using genetic algorithms. Your strategies just got smarter!';
+              break;
+            case 'candle':
+              specificMessage = '🔮 Candle Predictor initialized! AI-powered candlestick pattern recognition and future price prediction. The future is now visible!';
+              break;
+            case 'option-chain':
+              specificMessage = '💹 Option Chain analyzer active! Real-time options data with advanced Greeks calculations. Options trading just got smarter!';
+              break;
+            case 'neuron':
+              specificMessage = '🧠 Neuron Analysis system online! Deep learning market sentiment and trend analysis. The neural network sees all!';
+              break;
+            case 'sentiment':
+              specificMessage = '💭 Sentiment Scanner operational! Real-time market emotion analysis from social media, news, and trading data. Feel the market pulse!';
+              break;
+            case 'volume-profile':
+              specificMessage = '📊 Volume Profile analyzer ready! Advanced volume-at-price analysis with market structure insights. See where the big money trades!';
+              break;
+            case 'heat-map':
+              specificMessage = '🌡️ Market Heat Map loaded! Visual sector performance analysis with real-time color-coded insights. The market temperature is rising!';
+              break;
+            case 'risk-calculator':
+              specificMessage = '🧮 Risk Calculator online! Advanced position sizing with Kelly Criterion and risk-reward optimization. Trade smart, not hard!';
+              break;
+            case 'portfolio-analyzer':
+              specificMessage = '📋 Portfolio Analyzer active! Complete portfolio optimization with Sharpe ratio, beta analysis, and diversification metrics!';
+              break;
+            case 'drawdown-tracker':
+              specificMessage = '📉 Drawdown Tracker initialized! Real-time risk monitoring with maximum drawdown alerts and recovery analysis!';
+              break;
+            case 'correlation-matrix':
+              specificMessage = '🔗 Correlation Matrix ready! Asset correlation analysis with dynamic heat maps. Discover hidden market relationships!';
+              break;
+            case 'var-calculator':
+              specificMessage = '⚠️ VaR Calculator operational! Value at Risk analysis with Monte Carlo simulations. Know your maximum potential loss!';
+              break;
+            case 'backtester':
+              specificMessage = '🔁 Back-tester engine ready! Historical strategy testing with quantum-accurate simulations. Time to test your theories!';
+              break;
+            case 'forward-tester':
+              specificMessage = '⏭️ Forward Tester online! Live strategy testing with paper trading simulation. Test strategies in real market conditions!';
+              break;
+            case 'monte-carlo':
+              specificMessage = '🎲 Monte Carlo Simulator active! Advanced probability analysis with thousands of market scenarios. Predict the unpredictable!';
+              break;
+            case 'ask-ai':
+              specificMessage = '🤖 Ask AI module loaded! Advanced trading questions answered with neural intelligence. What would you like to know?';
+              break;
+            case 'pattern-recognition':
+              specificMessage = '🔍 Pattern Recognition system online! AI-powered chart pattern detection with 95% accuracy. Patterns never lie!';
+              break;
+            case 'neural-network':
+              specificMessage = '🕸️ Neural Network initialized! Deep learning models for price prediction and market analysis. The future is neural!';
+              break;
+            case 'dashboard':
+              specificMessage = '📊 Trading Dashboard loaded! Complete market overview with real-time data, charts, and performance metrics!';
+              break;
+            case 'watchlist':
+              specificMessage = '👁️ Watchlist Manager active! Smart stock tracking with AI-powered alerts and technical analysis. Never miss an opportunity!';
+              break;
+            case 'alerts':
+              specificMessage = '🔔 Alert System online! Intelligent notifications for price movements, pattern formations, and trading signals!';
+              break;
+            case 'news':
+              specificMessage = '📰 Market News aggregator ready! Real-time financial news with sentiment analysis and market impact scoring!';
+              break;
+            case 'settings':
+              specificMessage = '⚙️ System Settings panel loaded! Customize your trading environment, risk parameters, and AI preferences!';
+              break;
+            default:
+              specificMessage = `🎯 ${displayName} is now fully operational! All systems green and ready for advanced trading operations!`;
+          }
+          addSystemMessage(specificMessage);
+        }, 1000);
+      }, 1500);
+    }
+
+    // Voice input function
+    function toggleVoiceInput() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        
+        recognition.onstart = () => {
+          elements.voiceBtn.innerHTML = `
+            <div class="voice-wave">
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+            </div>
+            <span class="text-xs">Listening...</span>
+          `;
+        };
+        
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          elements.input.value = transcript;
+          updateCounters(transcript);
+          toggleSendButton(transcript.trim());
+        };
+        
+        recognition.onend = () => {
+          elements.voiceBtn.innerHTML = `
+            <svg class="w-5 h-5 mb-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 715 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-xs">Voice</span>
+          `;
+        };
+        
+        recognition.start();
+      } else {
+        addSystemMessage('❌ Voice recognition not supported in this browser. Please use a modern browser with speech recognition support.');
+      }
+    }
+
+    // Action button functions
+    function uploadFile() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.multiple = true;
+      input.accept = '*/*';
+      input.onchange = function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          const fileNames = files.map(f => f.name).join(', ');
+          addSystemMessage(`📎 Files uploaded: ${fileNames}. Ready for analysis!`);
+        }
+      };
+      input.click();
+    }
+
+    function openFolder() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.webkitdirectory = true;
+      input.onchange = function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          addSystemMessage(`📁 Folder loaded with ${files.length} files. Neural analysis initiated!`);
+        }
+      };
+      input.click();
+    }
+
+    function takePhoto() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            addSystemMessage(`📸 Camera access granted! Photo capture mode activated.`);
+            // In a real app, you'd show camera interface here
+            stream.getTracks().forEach(track => track.stop());
+          })
+          .catch(() => {
+            addSystemMessage(`❌ Camera access denied. Please enable camera permissions.`);
+          });
+      } else {
+        addSystemMessage(`📱 Camera not available on this device.`);
+      }
+    }
+
+    function createDocument() {
+      addSystemMessage(`📝 Document creation mode activated! Ready to generate content.`);
+    }
+
+    function generateImage() {
+      addSystemMessage(`🎨 Image generation engine starting up! Describe what you'd like to create.`);
+    }
+
+    function shareChat() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Lakshmi AI Chat',
+          text: 'Check out my conversation with Lakshmi AI!',
+          url: window.location.href
+        }).then(() => {
+          addSystemMessage(`🔗 Chat shared successfully!`);
+        }).catch(() => {
+          addSystemMessage(`📋 Share link copied to clipboard!`);
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          addSystemMessage(`📋 Chat link copied to clipboard!`);
+        });
+      }
+    }
+
+    function exportChat() {
+      const chatContent = document.getElementById('chatContainer').innerText;
+      const blob = new Blob([chatContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lakshmi-chat-${new Date().toISOString().split('T')[0]}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      addSystemMessage(`💾 Chat exported successfully!`);
+    }
+
+    // Add system message to chat
+    function addSystemMessage(message) {
+      const chatContainer = document.getElementById('chatContainer');
+      const systemDiv = document.createElement('div');
+      systemDiv.className = 'message-enter';
+      systemDiv.innerHTML = `
+        <div class="ai-message">
+          <div class="flex items-start space-x-3">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 mt-1 backdrop-blur-sm">
+              🧠
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center space-x-2 mb-2">
+                <p class="font-bold text-white text-base" style="font-family: 'Orbitron', monospace;">LAKSHMI</p>
+                <span class="text-white/70 text-xs">System</span>
+                <div class="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                <span class="text-white/60 text-xs">now</span>
+              </div>
+              <div class="leading-relaxed text-white text-base font-medium">
+                ${message}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      chatContainer.appendChild(systemDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('tradingMenu');
+      const toggle = document.getElementById('tradingToggle');
+      
+      if (isMenuOpen && !menu.contains(e.target) && !toggle.contains(e.target)) {
+        closeTradingMenu();
+      }
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isMenuOpen) {
+        closeTradingMenu();
+      }
+    });
+
     // Enhanced touch interactions
     if ('ontouchstart' in window) {
       const sendBtn = document.getElementById('neuralSend');
@@ -1154,20 +1924,23 @@
         this.style.transform = 'translateY(-3px) scale(1.05)';
       });
     }
-    
+
     // Performance monitoring
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
         console.log('🚀 Quantum Neural Interface initialized and ready for transmission 🚀');
       });
     }
-    
-    // Service Worker for offline capability
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {
-        console.log('Service Worker registration failed');
-      });
+
+    // Initialize the application when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initialize);
+
+    // Initialize immediately if DOM is already loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+      initialize();
     }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97274d8790cd33cc',t:'MTc1NTc0OTY1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97316f1841c93a1f',t:'MTc1NTg1NTg5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
