@@ -403,16 +403,16 @@
     }
     
     .neural-input-wrapper::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      padding: 2px;
-      background: var(--neural-gradient);
-      border-radius: 25px;
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask-composite: exclude;
-      -webkit-mask-composite: xor;
-      animation: borderFlow 3s linear infinite;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(5px);
+    border-radius: 1rem;
+    pointer-events: none;   /* ✅ allow typing */
     }
     
     @keyframes borderFlow {
@@ -1601,39 +1601,44 @@
 
     // Navigation function for trading functions
     function navigateToFunction(functionName) {
-      // Close menu first
-      closeTradingMenu();
-      
-      // Show loading state
-      const functionNames = {
-        'strategy': 'Strategy Builder',
-        'strategy-engine': 'Strategy Engine', 
-        'matrix': 'Strategy Matrix',
-        'analyzer': 'Strategy Analyzer',
-        'optimizer': 'Strategy Optimizer',
-        'candle': 'Candle Predictor',
-        'option-chain': 'Option Chain',
-        'neuron': 'Neuron Analysis',
-        'sentiment': 'Sentiment Scanner',
-        'volume-profile': 'Volume Profile',
-        'heat-map': 'Market Heat Map',
-        'risk-calculator': 'Risk Calculator',
-        'portfolio-analyzer': 'Portfolio Analyzer',
-        'drawdown-tracker': 'Drawdown Tracker',
-        'correlation-matrix': 'Correlation Matrix',
-        'var-calculator': 'VaR Calculator',
-        'backtester': 'Back-tester',
-        'forward-tester': 'Forward Tester',
-        'monte-carlo': 'Monte Carlo Simulator',
-        'ask-ai': 'Ask AI',
-        'pattern-recognition': 'Pattern Recognition',
-        'neural-network': 'Neural Network',
-        'dashboard': 'Trading Dashboard',
-        'watchlist': 'Watchlist Manager',
-        'alerts': 'Alert System',
-        'news': 'Market News',
-        'settings': 'System Settings'
-      };
+    // Close the slide-over menu if open
+    closeTradingMenu();
+
+    // Map function names to Flask routes
+    const routeMap = {
+        'strategy': '/strategy',
+        'strategy-engine': '/strategy-engine',
+        'matrix': '/matrix',
+        'analyzer': '/analyzer',
+        'optimizer': '/strategy',          // no dedicated route; reuse /strategy
+        'candle': '/candle',
+        'option-chain': '/option-chain',
+        'neuron': '/neuron',
+        'sentiment': '/ask-ai',            // best available
+        'volume-profile': '/dashboard',    // placeholder
+        'heat-map': '/dashboard',          // placeholder
+        'risk-calculator': '/dashboard',   // placeholder
+        'portfolio-analyzer': '/dashboard',
+        'drawdown-tracker': '/dashboard',
+        'correlation-matrix': '/dashboard',
+        'var-calculator': '/dashboard',
+        'backtester': '/strategy-engine',
+        'forward-tester': '/strategy-engine',
+        'monte-carlo': '/strategy-engine',
+        'ask-ai': '/ask-ai',
+        'pattern-recognition': '/candle',
+        'neural-network': '/neuron',
+        'dashboard': '/dashboard',
+        'watchlist': '/dashboard',
+        'alerts': '/dashboard',
+        'news': '/dashboard',
+        'settings': '/dashboard'
+    };
+
+    const route = routeMap[functionName] || '/dashboard';
+    // Navigate to Flask endpoint
+    window.location.href = route;
+    }
       
       const displayName = functionNames[functionName] || functionName.replace('-', ' ').toUpperCase();
       const loadingMessage = `🚀 Initializing ${displayName} module... Quantum neural pathways activating! ⚡`;
