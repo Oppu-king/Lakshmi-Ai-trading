@@ -631,7 +631,7 @@ def google_login():
     )
     return oauth.google.authorize_redirect(redirect_uri)
 
-@app.route("/auth/callback")
+@app.route("/auth/google/callback")
 def google_callback():
     """
     Handle Google's OAuth callback.
