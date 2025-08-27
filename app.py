@@ -60,10 +60,12 @@ INDIAN_SYMBOLS = {
     'fmcg': ['HINDUNILVR.NS', 'ITC.NS', 'NESTLEIND.NS', 'BRITANNIA.NS', 'DABUR.NS']
 }
 
+# ✅ Correct NSE/BSE index mappings
 SYMBOL_MAP = {
     "NIFTY": "^NSEI",
     "NIFTY 50": "^NSEI",
     "BANKNIFTY": "^NSEBANK",
+    "BANK NIFTY": "^NSEBANK",
     "SENSEX": "^BSESN"
 }
 
@@ -2475,127 +2477,108 @@ def api_select_strategy():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
         
-# ========== ROUTE 1: Market Data ==========
-@app.route('/api/market-data', methods=['POST'])
+# ---------------- ROUTES ---------------- #
+
+@app.route("/api/market-data", methods=["POST"])
 def market_data():
     try:
         data = request.json
-        symbol = data.get("symbol", "").upper()
+        symbol = data.get("symbol", "").upper().strip()
 
-        if not symbol:
-            return jsonify({"error": "Symbol required"}), 400
+        if symbol not in SYMBOL_MAP:
+            return jsonify({"error": f"Unsupported symbol: {symbol}"}), 400
 
-        yf_symbol = resolve_symbol(symbol)
-        ticker = yf.Ticker(yf_symbol)
+        ticker = SYMBOL_MAP[symbol]
+        stock = yf.Ticker(ticker)
 
-        # Daily for indices, intraday for stocks
-        if yf_symbol.startswith("^"):
-            hist = ticker.history(period="5d", interval="1d")
-        else:
-            hist = ticker.history(period="1d", interval="5m")
-
+        hist = stock.history(period="1mo", interval="1d")
         if hist.empty:
-            return jsonify({"error": f"No data found for {symbol} ({yf_symbol})"}), 404
+            return jsonify({"error": f"No data found for {symbol} ({ticker})"}), 404
 
-        latest = hist.iloc[-1]
+        last = hist.iloc[-1]
         return jsonify({
             "symbol": symbol,
-            "yf_symbol": yf_symbol,
-            "open": float(latest["Open"]),
-            "high": float(latest["High"]),
-            "low": float(latest["Low"]),
-            "close": float(latest["Close"]),
-            "volume": int(latest["Volume"])
+            "ticker": ticker,
+            "current_price": round(last["Close"], 2),
+            "day_high": round(last["High"], 2),
+            "day_low": round(last["Low"], 2),
+            "volume": int(last["Volume"])
         })
-
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"API Error: {str(e)}"}), 500
 
 
-
-# ========== ROUTE 2: Technical Analysis ==========
-@app.route('/api/technical-analysis', methods=['POST'])
+@app.route("/api/technical-analysis", methods=["POST"])
 def technical_analysis():
     try:
         data = request.json
-        symbol = data.get("symbol", "").upper()
+        symbol = data.get("symbol", "").upper().strip()
 
-        if not symbol:
-            return jsonify({"error": "Symbol required"}), 400
+        if symbol not in SYMBOL_MAP:
+            return jsonify({"error": f"Unsupported symbol: {symbol}"}), 400
 
-        yf_symbol = resolve_symbol(symbol)
-        ticker = yf.Ticker(yf_symbol)
+        ticker = SYMBOL_MAP[symbol]
+        stock = yf.Ticker(ticker)
 
-        # Daily for indices, intraday for stocks
-        if yf_symbol.startswith("^"):
-            hist = ticker.history(period="6mo", interval="1d")
-        else:
-            hist = ticker.history(period="1mo", interval="30m")
-
+        hist = stock.history(period="3mo", interval="1d")
         if hist.empty:
-            return jsonify({"error": f"No data found for {symbol} ({yf_symbol})"}), 404
+            return jsonify({"error": f"No data found for {symbol} ({ticker})"}), 404
 
-        candles_text = "\n".join(
-            [f"O:{row.Open:.2f}, H:{row.High:.2f}, L:{row.Low:.2f}, C:{row.Close:.2f}, V:{row.Volume}"
-             for _, row in hist.tail(100).iterrows()]
-        )
+        # Example indicators
+        hist["EMA20"] = hist["Close"].ewm(span=20, adjust=False).mean()
+        hist["EMA50"] = hist["Close"].ewm(span=50, adjust=False).mean()
 
-        payload = {
-            "model": "openchat/openchat-7b",
-            "messages": [
-                {"role": "system", "content": "You are a professional Indian stock market analyst."},
-                {"role": "user", "content": f"Perform a full technical analysis on {symbol} ({yf_symbol}) using these candles:\n{candles_text}"}
-            ]
-        }
-        headers = {
-            "Authorization": f"Bearer {OPENROUTER_KEY}",
-            "Content-Type": "application/json"
-        }
-        r = requests.post(OPENROUTER_URL, headers=headers, json=payload)
-        ai_response = r.json()
+        rsi_period = 14
+        delta = hist["Close"].diff()
+        gain = delta.where(delta > 0, 0).rolling(rsi_period).mean()
+        loss = -delta.where(delta < 0, 0).rolling(rsi_period).mean()
+        rs = gain / loss
+        hist["RSI"] = 100 - (100 / (1 + rs))
+
+        latest = hist.iloc[-1]
 
         return jsonify({
             "symbol": symbol,
-            "yf_symbol": yf_symbol,
-            "analysis": ai_response.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+            "ticker": ticker,
+            "ema20": round(latest["EMA20"], 2),
+            "ema50": round(latest["EMA50"], 2),
+            "rsi": round(latest["RSI"], 2)
         })
-
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"Technical analysis failed: {str(e)}"}), 500
 
 
-
-# ========== ROUTE 3: DeepSeek Analysis ==========
-@app.route('/api/deepseek-analysis', methods=['POST'])
+@app.route("/api/deepseek-analysis", methods=["POST"])
 def deepseek_analysis():
     try:
         data = request.json
-        query = data.get("query", "")
+        symbol = data.get("symbol", "").upper().strip()
 
-        if not query:
-            return jsonify({"error": "Query required"}), 400
+        if symbol not in SYMBOL_MAP:
+            return jsonify({"error": f"Unsupported symbol: {symbol}"}), 400
 
-        payload = {
-            "model": "deepseek-ai/deepseek-coder",
-            "messages": [
-                {"role": "system", "content": "You are an advanced financial AI specialized in deep Indian market institutional-level analysis."},
-                {"role": "user", "content": query}
-            ]
-        }
-        headers = {
-            "Authorization": f"Bearer {OPENROUTER_KEY}",
-            "Content-Type": "application/json"
-        }
-        r = requests.post(OPENROUTER_URL, headers=headers, json=payload)
-        ai_response = r.json()
+        ticker = SYMBOL_MAP[symbol]
+        stock = yf.Ticker(ticker)
+
+        hist = stock.history(period="6mo", interval="1d")
+        if hist.empty:
+            return jsonify({"error": f"No data found for {symbol} ({ticker})"}), 404
+
+        latest_close = hist["Close"].iloc[-1]
+        ema20 = hist["Close"].ewm(span=20).mean().iloc[-1]
+        ema50 = hist["Close"].ewm(span=50).mean().iloc[-1]
+
+        signal = "Bullish" if ema20 > ema50 else "Bearish"
 
         return jsonify({
-            "query": query,
-            "deepseek_response": ai_response.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+            "symbol": symbol,
+            "ticker": ticker,
+            "signal": signal,
+            "confidence": "High" if abs(ema20 - ema50) > 50 else "Moderate",
+            "latest_price": round(latest_close, 2)
         })
-
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"DeepSeek analysis failed: {str(e)}"}), 500
 
 # --- Start App ---
 import os
