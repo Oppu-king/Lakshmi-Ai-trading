@@ -548,6 +548,17 @@ def get_real_insider_data(period):
     except Exception as e:
         return {'error': str(e)}
 
+# ✅ Helper function to resolve correct Yahoo Finance symbol
+def resolve_symbol(symbol: str) -> str:
+    symbol = symbol.upper().strip()
+    if symbol in SYMBOL_MAP:
+        return SYMBOL_MAP[symbol]          # mapped index
+    elif symbol.startswith("^"):
+        return symbol                      # already Yahoo index
+    else:
+        return symbol + ".NS"              # assume NSE stock
+
+
 # --- Routes ---
 @app.route("/")
 def root():
@@ -2464,7 +2475,7 @@ def api_select_strategy():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
         
-# Market Data Route
+# ========== ROUTE 1: Market Data ==========
 @app.route('/api/market-data', methods=['POST'])
 def market_data():
     try:
@@ -2474,11 +2485,10 @@ def market_data():
         if not symbol:
             return jsonify({"error": "Symbol required"}), 400
 
-        yf_symbol = SYMBOL_MAP.get(symbol, symbol + ".NS")
-
+        yf_symbol = resolve_symbol(symbol)
         ticker = yf.Ticker(yf_symbol)
 
-        # ✅ Use daily candles if it's an index
+        # Daily for indices, intraday for stocks
         if yf_symbol.startswith("^"):
             hist = ticker.history(period="5d", interval="1d")
         else:
@@ -2503,7 +2513,7 @@ def market_data():
 
 
 
-# Technical Analysis Route
+# ========== ROUTE 2: Technical Analysis ==========
 @app.route('/api/technical-analysis', methods=['POST'])
 def technical_analysis():
     try:
@@ -2513,10 +2523,10 @@ def technical_analysis():
         if not symbol:
             return jsonify({"error": "Symbol required"}), 400
 
-        yf_symbol = SYMBOL_MAP.get(symbol, symbol + ".NS")
+        yf_symbol = resolve_symbol(symbol)
         ticker = yf.Ticker(yf_symbol)
 
-        # ✅ Use daily data for indices, intraday for stocks
+        # Daily for indices, intraday for stocks
         if yf_symbol.startswith("^"):
             hist = ticker.history(period="6mo", interval="1d")
         else:
@@ -2548,6 +2558,40 @@ def technical_analysis():
             "symbol": symbol,
             "yf_symbol": yf_symbol,
             "analysis": ai_response.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+# ========== ROUTE 3: DeepSeek Analysis ==========
+@app.route('/api/deepseek-analysis', methods=['POST'])
+def deepseek_analysis():
+    try:
+        data = request.json
+        query = data.get("query", "")
+
+        if not query:
+            return jsonify({"error": "Query required"}), 400
+
+        payload = {
+            "model": "deepseek-ai/deepseek-coder",
+            "messages": [
+                {"role": "system", "content": "You are an advanced financial AI specialized in deep Indian market institutional-level analysis."},
+                {"role": "user", "content": query}
+            ]
+        }
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_KEY}",
+            "Content-Type": "application/json"
+        }
+        r = requests.post(OPENROUTER_URL, headers=headers, json=payload)
+        ai_response = r.json()
+
+        return jsonify({
+            "query": query,
+            "deepseek_response": ai_response.get("choices", [{}])[0].get("message", {}).get("content", "No response")
         })
 
     except Exception as e:
