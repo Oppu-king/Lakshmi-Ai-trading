@@ -60,6 +60,13 @@ INDIAN_SYMBOLS = {
     'fmcg': ['HINDUNILVR.NS', 'ITC.NS', 'NESTLEIND.NS', 'BRITANNIA.NS', 'DABUR.NS']
 }
 
+SYMBOL_MAP = {
+    "NIFTY": "^NSEI",
+    "NIFTY 50": "^NSEI",
+    "BANKNIFTY": "^NSEBANK",
+    "SENSEX": "^BSESN"
+}
+
 app = Flask(__name__)
 app.secret_key = "lakshmi_secret_key"
 app.config['UPLOAD_FOLDER'] = 'static/voice_notes'
