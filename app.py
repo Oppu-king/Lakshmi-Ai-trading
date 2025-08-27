@@ -113,7 +113,7 @@ OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # --- Google OAuth Settings ---
 GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
-REDIRECT_URI = "https://lakshmi-ai-trading-mw31.onrender.com/auth/callback"
+REDIRECT_URI = "https://lakshmi-ai-trades.onrender.com/auth/callback"
 
 # --- Global Variables ---
 mode = "wife"
