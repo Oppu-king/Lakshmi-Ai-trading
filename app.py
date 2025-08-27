@@ -2457,6 +2457,112 @@ def api_select_strategy():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
         
+# ========== ROUTE 1: Market Data ==========
+@app.route('/api/market-data', methods=['POST'])
+def market_data():
+    try:
+        data = request.json
+        symbol = data.get("symbol", "").upper()
+
+        if not symbol:
+            return jsonify({"error": "Symbol required"}), 400
+
+        ticker = yf.Ticker(symbol + ".NS")
+        hist = ticker.history(period="1d", interval="5m")
+
+        if hist.empty:
+            return jsonify({"error": "No data found"}), 404
+
+        latest = hist.iloc[-1]
+        return jsonify({
+            "symbol": symbol,
+            "open": float(latest["Open"]),
+            "high": float(latest["High"]),
+            "low": float(latest["Low"]),
+            "close": float(latest["Close"]),
+            "volume": int(latest["Volume"])
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ========== ROUTE 2: Technical Analysis ==========
+@app.route('/api/technical-analysis', methods=['POST'])
+def technical_analysis():
+    try:
+        data = request.json
+        symbol = data.get("symbol", "").upper()
+
+        if not symbol:
+            return jsonify({"error": "Symbol required"}), 400
+
+        ticker = yf.Ticker(symbol + ".NS")
+        hist = ticker.history(period="5d", interval="15m")
+
+        if hist.empty:
+            return jsonify({"error": "No data found"}), 404
+
+        candles_text = "\n".join(
+            [f"O:{row.Open:.2f}, H:{row.High:.2f}, L:{row.Low:.2f}, C:{row.Close:.2f}, V:{row.Volume}"
+             for _, row in hist.tail(50).iterrows()]
+        )
+
+        payload = {
+            "model": "openchat/openchat-7b",
+            "messages": [
+                {"role": "system", "content": "You are a professional stock market analyst."},
+                {"role": "user", "content": f"Perform a full technical analysis on {symbol} using these candles:\n{candles_text}"}
+            ]
+        }
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_KEY}",
+            "Content-Type": "application/json"
+        }
+        r = requests.post(OPENROUTER_URL, headers=headers, json=payload)
+        ai_response = r.json()
+
+        return jsonify({
+            "symbol": symbol,
+            "analysis": ai_response.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ========== ROUTE 3: DeepSeek Analysis ==========
+@app.route('/api/deepseek-analysis', methods=['POST'])
+def deepseek_analysis():
+    try:
+        data = request.json
+        query = data.get("query", "")
+
+        if not query:
+            return jsonify({"error": "Query required"}), 400
+
+        payload = {
+            "model": "deepseek-ai/deepseek-coder",
+            "messages": [
+                {"role": "system", "content": "You are an advanced financial AI specialized in deep institutional-level analysis."},
+                {"role": "user", "content": query}
+            ]
+        }
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_KEY}",
+            "Content-Type": "application/json"
+        }
+        r = requests.post(OPENROUTER_URL, headers=headers, json=payload)
+        ai_response = r.json()
+
+        return jsonify({
+            "query": query,
+            "deepseek_response": ai_response.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # --- Start App ---
 import os
 
