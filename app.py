@@ -1911,7 +1911,7 @@ def analyzer():
 
 @app.route("/strategy-engine")
 def strategy_engine():
-    # Removed session check, so anyone can access
+    print("Reached strategy_engine route")
     return render_template("strategy_engine.html")
 
 @app.route("/analyze-strategy", methods=["POST"])
