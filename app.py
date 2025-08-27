@@ -1911,8 +1911,7 @@ def analyzer():
 
 @app.route("/strategy-engine")
 def strategy_engine():
-    if 'username' not in session:
-        return redirect("/login")
+    # Removed session check, so anyone can access
     return render_template("strategy_engine.html")
 
 @app.route("/analyze-strategy", methods=["POST"])
