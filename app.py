@@ -550,15 +550,18 @@ def get_real_insider_data(period):
     except Exception as e:
         return {'error': str(e)}
 
-# ✅ Helper function to resolve correct Yahoo Finance symbol
-def resolve_symbol(symbol: str) -> str:
-    symbol = symbol.upper().strip()
-    if symbol in SYMBOL_MAP:
-        return SYMBOL_MAP[symbol]          # mapped index
-    elif symbol.startswith("^"):
-        return symbol                      # already Yahoo index
-    else:
-        return symbol + ".NS"              # assume NSE stock
+def resolve_symbol(symbol: str) -> (str, bool):
+    """
+    Returns a tuple of (ticker, is_index)
+    For mapped indices it sets is_index = True, for others False.
+    """
+    sym = symbol.upper().strip()
+    if sym in SYMBOL_MAP:
+        return SYMBOL_MAP[sym], True
+    if sym.startswith("^"):
+        return sym, True
+    return sym + ".NS", False
+
 
 
 # --- Routes ---
@@ -2481,31 +2484,34 @@ def api_select_strategy():
 
 @app.route("/api/market-data", methods=["POST"])
 def market_data():
+    data = request.json or {}
+    symbol = data.get("symbol", "").strip()
+    if not symbol:
+        return jsonify({"error": "Symbol required"}), 400
+
+    ticker, is_index = resolve_symbol(symbol)
+
     try:
-        data = request.json
-        symbol = data.get("symbol", "").upper().strip()
-
-        if symbol not in SYMBOL_MAP:
-            return jsonify({"error": f"Unsupported symbol: {symbol}"}), 400
-
-        ticker = SYMBOL_MAP[symbol]
-        stock = yf.Ticker(ticker)
-
-        hist = stock.history(period="1mo", interval="1d")
-        if hist.empty:
-            return jsonify({"error": f"No data found for {symbol} ({ticker})"}), 404
-
-        last = hist.iloc[-1]
-        return jsonify({
-            "symbol": symbol,
-            "ticker": ticker,
-            "current_price": round(last["Close"], 2),
-            "day_high": round(last["High"], 2),
-            "day_low": round(last["Low"], 2),
-            "volume": int(last["Volume"])
-        })
+        if is_index:
+            df = yf.download(ticker, period="5d", interval="1d", progress=False)
+        else:
+            df = yf.download(ticker, period="1d", interval="5m", progress=False)
     except Exception as e:
-        return jsonify({"error": f"API Error: {str(e)}"}), 500
+        return jsonify({"error": f"Download failed: {str(e)}"}), 500
+
+    if df.empty:
+        return jsonify({"error": f"No data found for {symbol} ({ticker})"}), 404
+
+    last = df.iloc[-1]
+    return jsonify({
+        "symbol": symbol,
+        "ticker": ticker,
+        "open": round(last["Open"], 2),
+        "high": round(last["High"], 2),
+        "low": round(last["Low"], 2),
+        "close": round(last["Close"], 2),
+        "volume": int(last.get("Volume", 0))
+    })
 
 
 @app.route("/api/technical-analysis", methods=["POST"])
