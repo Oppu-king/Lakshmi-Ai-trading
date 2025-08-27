@@ -617,49 +617,46 @@ def biometric_auth():
         print("Biometric auth error:", e)
         return jsonify({'success': False, 'message': 'Server error'}), 500
 
-
 # ---- OAuth (Google) ----
 @app.route("/auth/google")
 def google_login():
-"""
-Start Google OAuth login flow.
-"""
-# Use env variable if provided, fallback to dynamic URL
-redirect_uri = os.getenv(
-"GOOGLE_REDIRECT_URI",
-url_for("google_callback", _external=True)
-)
-return oauth.google.authorize_redirect(redirect_uri)
+    """Start Google OAuth login flow."""
+    # Use env variable if provided, fallback to dynamic URL
+    redirect_uri = os.getenv(
+        "GOOGLE_REDIRECT_URI",
+        url_for("google_callback", _external=True)
+    )
+    return oauth.google.authorize_redirect(redirect_uri)
+
 
 @app.route("/auth/callback")
 def google_callback():
-"""
-Handle Google's OAuth callback.
-"""
-try:
-token = oauth.google.authorize_access_token()
-# Try userinfo endpoint
-try:
-user_json = oauth.google.userinfo(token=token).json()
-except Exception:
-# Fallback for older endpoints
-user_json = oauth.google.get("userinfo", token=token).json()
+    """Handle Google's OAuth callback."""
+    try:
+        token = oauth.google.authorize_access_token()
 
-email = user_json.get("email")  
-    name = user_json.get("name") or email  
+        # Try userinfo endpoint
+        try:
+            user_json = oauth.google.userinfo(token=token).json()
+        except Exception:
+            # Fallback for older endpoints
+            user_json = oauth.google.get("userinfo", token=token).json()
 
-    # Store user info in session (adapt to your app's logic)  
-    session['user_id'] = email or "google_user"  
-    session['user_name'] = name  
-    session['user_email'] = email  
-    session['auth_method'] = 'google'  
-    session['login_time'] = datetime.utcnow().isoformat()  
-    session['google_token'] = token  
+        email = user_json.get("email")
+        name = user_json.get("name") or email
 
-    return redirect('/dashboard')  # adjust target route if needed  
-except Exception as e:  
-    print("Google callback error:", e)  
-    return redirect(url_for("login_page"))
+        # Store user info in session (adapt to your app's logic)
+        session['user_id'] = email or "google_user"
+        session['user_name'] = name
+        session['user_email'] = email
+        session['auth_method'] = 'google'
+        session['login_time'] = datetime.utcnow().isoformat()
+        session['google_token'] = token
+
+        return redirect('/dashboard')  # adjust target route if needed
+    except Exception as e:
+        print("Google callback error:", e)
+        return redirect(url_for("login_page"))
 
 # ---- OAuth (Facebook) ----
 @app.route("/auth/facebook")
