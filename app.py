@@ -2464,7 +2464,7 @@ def api_select_strategy():
 # --- Start App ---
 import os
 
-api_key = os.environ.get"OPENROUTER_API_KEY")
+api_key = os.environ.get("OPENROUTER_API_KEY")
 
 # ------------------ RUN ------------------
 if __name__ == "__main__":
