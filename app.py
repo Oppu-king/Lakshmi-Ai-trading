@@ -60,13 +60,11 @@ INDIAN_SYMBOLS = {
     'fmcg': ['HINDUNILVR.NS', 'ITC.NS', 'NESTLEIND.NS', 'BRITANNIA.NS', 'DABUR.NS']
 }
 
-# ✅ Correct NSE/BSE index mappings
 SYMBOL_MAP = {
-    "NIFTY": "^NSEI",
-    "NIFTY 50": "^NSEI",
-    "BANKNIFTY": "^NSEBANK",
-    "BANK NIFTY": "^NSEBANK",
-    "SENSEX": "^BSESN"
+    "NIFTY": "NIFTYBEES.NS",       # NIFTY ETF
+    "NIFTY 50": "NIFTYBEES.NS",
+    "BANKNIFTY": "BANKBEES.NS",    # BANKNIFTY ETF
+    "SENSEX": "BSENSEX.BO"         # BSE Sensex Index ETF
 }
 
 app = Flask(__name__)
