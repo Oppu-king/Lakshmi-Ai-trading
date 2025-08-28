@@ -566,27 +566,27 @@ def get_real_insider_data(period):
         return {'error': str(e)}
 
 def decorator(f):
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            now = time.time()
-            key = request.remote_addr
-            
-            if key not in calls:
-                calls[key] = []
-            
-            # Remove old calls
-            calls[key] = [call_time for call_time in calls[key] if now - call_time < period]
-            
-            if len(calls[key]) >= max_calls:
-                return jsonify({
-                    'error': 'Rate limit exceeded',
-                    'message': f'Maximum {max_calls} calls per {period} seconds'
-                }), 429
-            
-            calls[key].append(now)
-            return f(*args, **kwargs)
-        return wrapper
-    return decorator
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        now = time.time()
+        key = request.remote_addr
+
+        if key not in calls:
+            calls[key] = []
+
+        # Remove old calls
+        calls[key] = [call_time for call_time in calls[key] if now - call_time < period]
+
+        if len(calls[key]) >= max_calls:
+            return jsonify({
+                'error': 'Rate limit exceeded',
+                'message': f'Maximum {max_calls} calls per {period} seconds'
+            }), 429
+
+        calls[key].append(now)
+        return f(*args, **kwargs)
+
+    return wrapper  # aligned properly
 
 # Error handler decorator
 def handle_errors(f):
