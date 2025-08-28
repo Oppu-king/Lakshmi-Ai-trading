@@ -28,7 +28,7 @@ import scipy.stats as stats
 from newsapi import NewsApiClient
 from authlib.integrations.flask_client import OAuth
 import hashlib
-import talib
+import math
 import logging
 from functools import wraps
 import secrets
@@ -138,6 +138,27 @@ romantic_replies = [
     "Want to hear something naughty, darling? 😏"
 ]
 
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Configuration
+class Config:
+    # OpenRouter API Configuration for DeepSeek V3
+    OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY', 'your_openrouter_api_key_here')
+    OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+    
+    # DeepSeek V3 Model
+    DEEPSEEK_MODEL = "deepseek/deepseek-chat"
+    
+    # Rate limiting
+    RATE_LIMIT_CALLS = 100
+    RATE_LIMIT_PERIOD = 3600  # 1 hour
+
+# Rate limiting decorator
+def rate_limit(max_calls=100, period=3600):
+    calls = {}
 
 # --- User Handling ---
 def load_users():
@@ -582,6 +603,100 @@ def handle_errors(f):
             }), 500
     return wrapper
 
+# Custom Technical Analysis Functions (No TA-Lib dependency)
+class TechnicalAnalysis:
+    @staticmethod
+    def sma(data, period):
+        """Simple Moving Average"""
+        return data.rolling(window=period).mean()
+    
+    @staticmethod
+    def ema(data, period):
+        """Exponential Moving Average"""
+        return data.ewm(span=period).mean()
+    
+    @staticmethod
+    def rsi(data, period=14):
+        """Relative Strength Index"""
+        delta = data.diff()
+        gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
+        loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
+        rs = gain / loss
+        rsi = 100 - (100 / (1 + rs))
+        return rsi
+    
+    @staticmethod
+    def macd(data, fast=12, slow=26, signal=9):
+        """MACD Indicator"""
+        ema_fast = TechnicalAnalysis.ema(data, fast)
+        ema_slow = TechnicalAnalysis.ema(data, slow)
+        macd_line = ema_fast - ema_slow
+        signal_line = TechnicalAnalysis.ema(macd_line, signal)
+        histogram = macd_line - signal_line
+        return macd_line, signal_line, histogram
+    
+    @staticmethod
+    def bollinger_bands(data, period=20, std_dev=2):
+        """Bollinger Bands"""
+        sma = TechnicalAnalysis.sma(data, period)
+        std = data.rolling(window=period).std()
+        upper_band = sma + (std * std_dev)
+        lower_band = sma - (std * std_dev)
+        return upper_band, sma, lower_band
+    
+    @staticmethod
+    def stochastic(high, low, close, k_period=14, d_period=3):
+        """Stochastic Oscillator"""
+        lowest_low = low.rolling(window=k_period).min()
+        highest_high = high.rolling(window=k_period).max()
+        k_percent = 100 * ((close - lowest_low) / (highest_high - lowest_low))
+        d_percent = k_percent.rolling(window=d_period).mean()
+        return k_percent, d_percent
+    
+    @staticmethod
+    def williams_r(high, low, close, period=14):
+        """Williams %R"""
+        highest_high = high.rolling(window=period).max()
+        lowest_low = low.rolling(window=period).min()
+        wr = -100 * ((highest_high - close) / (highest_high - lowest_low))
+        return wr
+    
+    @staticmethod
+    def atr(high, low, close, period=14):
+        """Average True Range"""
+        high_low = high - low
+        high_close = np.abs(high - close.shift())
+        low_close = np.abs(low - close.shift())
+        ranges = pd.concat([high_low, high_close, low_close], axis=1)
+        true_range = ranges.max(axis=1)
+        atr = true_range.rolling(window=period).mean()
+        return atr
+    
+    @staticmethod
+    def obv(close, volume):
+        """On Balance Volume"""
+        obv = (np.sign(close.diff()) * volume).fillna(0).cumsum()
+        return obv
+    
+    @staticmethod
+    def adx(high, low, close, period=14):
+        """Average Directional Index (Simplified)"""
+        # Simplified ADX calculation
+        high_diff = high.diff()
+        low_diff = low.diff()
+        
+        plus_dm = high_diff.where((high_diff > low_diff) & (high_diff > 0), 0)
+        minus_dm = (-low_diff).where((low_diff > high_diff) & (low_diff > 0), 0)
+        
+        atr = TechnicalAnalysis.atr(high, low, close, period)
+        plus_di = 100 * (plus_dm.rolling(window=period).mean() / atr)
+        minus_di = 100 * (minus_dm.rolling(window=period).mean() / atr)
+        
+        dx = 100 * np.abs(plus_di - minus_di) / (plus_di + minus_di)
+        adx = dx.rolling(window=period).mean()
+        
+        return adx
+
 # Utility Functions
 def get_indian_symbol(symbol):
     """Convert symbol to proper Indian market format"""
@@ -595,45 +710,45 @@ def get_indian_symbol(symbol):
     return symbol
 
 def calculate_technical_indicators(df):
-    """Calculate comprehensive technical indicators"""
+    """Calculate comprehensive technical indicators using custom functions"""
     try:
         # Ensure we have OHLCV data
         if df.empty or len(df) < 20:
             return {}
         
         # Price data
-        high = df['High'].values
-        low = df['Low'].values
-        close = df['Close'].values
-        volume = df['Volume'].values
+        high = df['High']
+        low = df['Low']
+        close = df['Close']
+        volume = df['Volume']
         
         indicators = {}
         
         # Moving Averages
-        indicators['sma_20'] = talib.SMA(close, timeperiod=20)
-        indicators['sma_50'] = talib.SMA(close, timeperiod=50)
-        indicators['ema_12'] = talib.EMA(close, timeperiod=12)
-        indicators['ema_26'] = talib.EMA(close, timeperiod=26)
+        indicators['sma_20'] = TechnicalAnalysis.sma(close, 20)
+        indicators['sma_50'] = TechnicalAnalysis.sma(close, 50)
+        indicators['ema_12'] = TechnicalAnalysis.ema(close, 12)
+        indicators['ema_26'] = TechnicalAnalysis.ema(close, 26)
         
         # Momentum Indicators
-        indicators['rsi'] = talib.RSI(close, timeperiod=14)
-        indicators['stoch_k'], indicators['stoch_d'] = talib.STOCH(high, low, close)
-        indicators['williams_r'] = talib.WILLR(high, low, close, timeperiod=14)
+        indicators['rsi'] = TechnicalAnalysis.rsi(close, 14)
+        indicators['stoch_k'], indicators['stoch_d'] = TechnicalAnalysis.stochastic(high, low, close)
+        indicators['williams_r'] = TechnicalAnalysis.williams_r(high, low, close, 14)
         
         # Trend Indicators
-        indicators['macd'], indicators['macd_signal'], indicators['macd_hist'] = talib.MACD(close)
-        indicators['adx'] = talib.ADX(high, low, close, timeperiod=14)
+        indicators['macd'], indicators['macd_signal'], indicators['macd_hist'] = TechnicalAnalysis.macd(close)
+        indicators['adx'] = TechnicalAnalysis.adx(high, low, close, 14)
         
         # Volatility Indicators
-        indicators['bb_upper'], indicators['bb_middle'], indicators['bb_lower'] = talib.BBANDS(close)
-        indicators['atr'] = talib.ATR(high, low, close, timeperiod=14)
+        indicators['bb_upper'], indicators['bb_middle'], indicators['bb_lower'] = TechnicalAnalysis.bollinger_bands(close)
+        indicators['atr'] = TechnicalAnalysis.atr(high, low, close, 14)
         
         # Volume Indicators
-        indicators['obv'] = talib.OBV(close, volume)
+        indicators['obv'] = TechnicalAnalysis.obv(close, volume)
         
         # Support and Resistance
-        indicators['support'] = np.min(low[-20:]) if len(low) >= 20 else np.min(low)
-        indicators['resistance'] = np.max(high[-20:]) if len(high) >= 20 else np.max(high)
+        indicators['support'] = low.rolling(window=20).min().iloc[-1] if len(low) >= 20 else low.min()
+        indicators['resistance'] = high.rolling(window=20).max().iloc[-1] if len(high) >= 20 else high.max()
         
         return indicators
         
@@ -657,51 +772,65 @@ def generate_trading_signals(indicators, current_price):
         signal_count = 0
         
         # RSI Signal
-        rsi = indicators.get('rsi', [np.nan])[-1] if len(indicators.get('rsi', [])) > 0 else np.nan
-        if not np.isnan(rsi):
-            if rsi < 30:
-                score += 2
-                signals['signals'].append('RSI Oversold - BUY Signal')
-            elif rsi > 70:
-                score -= 2
-                signals['signals'].append('RSI Overbought - SELL Signal')
-            signal_count += 1
+        rsi_values = indicators.get('rsi')
+        if rsi_values is not None and not rsi_values.empty:
+            rsi = rsi_values.iloc[-1]
+            if not pd.isna(rsi):
+                if rsi < 30:
+                    score += 2
+                    signals['signals'].append('RSI Oversold - BUY Signal')
+                elif rsi > 70:
+                    score -= 2
+                    signals['signals'].append('RSI Overbought - SELL Signal')
+                signal_count += 1
         
         # MACD Signal
-        macd = indicators.get('macd', [np.nan])[-1] if len(indicators.get('macd', [])) > 0 else np.nan
-        macd_signal = indicators.get('macd_signal', [np.nan])[-1] if len(indicators.get('macd_signal', [])) > 0 else np.nan
+        macd_values = indicators.get('macd')
+        macd_signal_values = indicators.get('macd_signal')
         
-        if not np.isnan(macd) and not np.isnan(macd_signal):
-            if macd > macd_signal:
-                score += 1
-                signals['signals'].append('MACD Bullish Crossover')
-            else:
-                score -= 1
-                signals['signals'].append('MACD Bearish Crossover')
-            signal_count += 1
+        if (macd_values is not None and not macd_values.empty and 
+            macd_signal_values is not None and not macd_signal_values.empty):
+            macd = macd_values.iloc[-1]
+            macd_signal = macd_signal_values.iloc[-1]
+            
+            if not pd.isna(macd) and not pd.isna(macd_signal):
+                if macd > macd_signal:
+                    score += 1
+                    signals['signals'].append('MACD Bullish Crossover')
+                else:
+                    score -= 1
+                    signals['signals'].append('MACD Bearish Crossover')
+                signal_count += 1
         
         # Moving Average Signal
-        sma_20 = indicators.get('sma_20', [np.nan])[-1] if len(indicators.get('sma_20', [])) > 0 else np.nan
-        sma_50 = indicators.get('sma_50', [np.nan])[-1] if len(indicators.get('sma_50', [])) > 0 else np.nan
+        sma_20_values = indicators.get('sma_20')
+        sma_50_values = indicators.get('sma_50')
         
-        if not np.isnan(sma_20) and not np.isnan(sma_50):
-            if sma_20 > sma_50:
-                score += 1
-                signals['signals'].append('Golden Cross - Bullish Trend')
-            else:
-                score -= 1
-                signals['signals'].append('Death Cross - Bearish Trend')
-            signal_count += 1
+        if (sma_20_values is not None and not sma_20_values.empty and 
+            sma_50_values is not None and not sma_50_values.empty):
+            sma_20 = sma_20_values.iloc[-1]
+            sma_50 = sma_50_values.iloc[-1]
+            
+            if not pd.isna(sma_20) and not pd.isna(sma_50):
+                if sma_20 > sma_50:
+                    score += 1
+                    signals['signals'].append('Golden Cross - Bullish Trend')
+                else:
+                    score -= 1
+                    signals['signals'].append('Death Cross - Bearish Trend')
+                signal_count += 1
         
         # Price vs SMA Signal
-        if not np.isnan(sma_20):
-            if current_price > sma_20:
-                score += 1
-                signals['signals'].append('Price Above SMA20 - Bullish')
-            else:
-                score -= 1
-                signals['signals'].append('Price Below SMA20 - Bearish')
-            signal_count += 1
+        if sma_20_values is not None and not sma_20_values.empty:
+            sma_20 = sma_20_values.iloc[-1]
+            if not pd.isna(sma_20):
+                if current_price > sma_20:
+                    score += 1
+                    signals['signals'].append('Price Above SMA20 - Bullish')
+                else:
+                    score -= 1
+                    signals['signals'].append('Price Below SMA20 - Bearish')
+                signal_count += 1
         
         # Calculate overall signal
         if signal_count > 0:
@@ -807,6 +936,16 @@ def calculate_api_cost(usage):
     total_cost = (input_tokens / 1000 * input_cost_per_1k) + (output_tokens / 1000 * output_cost_per_1k)
     
     return f"{total_cost:.6f}"
+
+def safe_float(value, default=0.0):
+    """Safely convert value to float"""
+    try:
+        if pd.isna(value):
+            return default
+        return float(value)
+    except (ValueError, TypeError):
+        return default
+
 
 
 # --- Routes ---
@@ -2726,7 +2865,6 @@ def api_select_strategy():
         return jsonify({"error": str(e)}), 500
         
 # ---------------- ROUTES ---------------- #
-
 @app.route('/api/market-data', methods=['POST'])
 @rate_limit(max_calls=50, period=3600)
 @handle_errors
@@ -2759,13 +2897,26 @@ def get_market_data():
         indicators = calculate_technical_indicators(hist_data)
         
         # Prepare response data
-        current_price = float(hist_data['Close'].iloc[-1])
-        prev_close = float(hist_data['Close'].iloc[-2]) if len(hist_data) > 1 else current_price
+        current_price = safe_float(hist_data['Close'].iloc[-1])
+        prev_close = safe_float(hist_data['Close'].iloc[-2] if len(hist_data) > 1 else current_price)
         price_change = current_price - prev_close
         change_percent = (price_change / prev_close) * 100 if prev_close != 0 else 0
         
         # Generate trading signals
         signals = generate_trading_signals(indicators, current_price)
+        
+        # Safely extract indicator values
+        def get_indicator_value(indicator_name, default=0.0):
+            indicator = indicators.get(indicator_name)
+            if indicator is not None and not indicator.empty:
+                return safe_float(indicator.iloc[-1], default)
+            return default
+        
+        def get_indicator_list(indicator_name):
+            indicator = indicators.get(indicator_name)
+            if indicator is not None and not indicator.empty:
+                return [safe_float(x) for x in indicator.tolist()]
+            return []
         
         response_data = {
             'success': True,
@@ -2773,9 +2924,9 @@ def get_market_data():
             'current_price': current_price,
             'price_change': price_change,
             'change_percent': change_percent,
-            'volume': int(hist_data['Volume'].iloc[-1]) if not pd.isna(hist_data['Volume'].iloc[-1]) else 0,
-            'day_high': float(hist_data['High'].iloc[-1]),
-            'day_low': float(hist_data['Low'].iloc[-1]),
+            'volume': int(safe_float(hist_data['Volume'].iloc[-1])),
+            'day_high': safe_float(hist_data['High'].iloc[-1]),
+            'day_low': safe_float(hist_data['Low'].iloc[-1]),
             'week_52_high': info.get('fiftyTwoWeekHigh', 0),
             'week_52_low': info.get('fiftyTwoWeekLow', 0),
             'market_cap': info.get('marketCap', 'N/A'),
@@ -2783,17 +2934,17 @@ def get_market_data():
             'exchange': info.get('exchange', 'NSE'),
             'currency': info.get('currency', 'INR'),
             'timestamps': [int(ts.timestamp() * 1000) for ts in hist_data.index],
-            'prices': hist_data['Close'].tolist(),
-            'volumes': hist_data['Volume'].tolist(),
-            'highs': hist_data['High'].tolist(),
-            'lows': hist_data['Low'].tolist(),
-            'opens': hist_data['Open'].tolist(),
-            'sma_20': indicators.get('sma_20', []).tolist() if 'sma_20' in indicators else [],
-            'ema_12': indicators.get('ema_12', []).tolist() if 'ema_12' in indicators else [],
-            'rsi': float(indicators.get('rsi', [np.nan])[-1]) if len(indicators.get('rsi', [])) > 0 else 0,
-            'macd': float(indicators.get('macd', [np.nan])[-1]) if len(indicators.get('macd', [])) > 0 else 0,
-            'support_level': float(indicators.get('support', current_price * 0.95)),
-            'resistance_level': float(indicators.get('resistance', current_price * 1.05)),
+            'prices': [safe_float(x) for x in hist_data['Close'].tolist()],
+            'volumes': [safe_float(x) for x in hist_data['Volume'].tolist()],
+            'highs': [safe_float(x) for x in hist_data['High'].tolist()],
+            'lows': [safe_float(x) for x in hist_data['Low'].tolist()],
+            'opens': [safe_float(x) for x in hist_data['Open'].tolist()],
+            'sma_20': get_indicator_list('sma_20'),
+            'ema_12': get_indicator_list('ema_12'),
+            'rsi': get_indicator_value('rsi'),
+            'macd': get_indicator_value('macd'),
+            'support_level': safe_float(indicators.get('support', current_price * 0.95)),
+            'resistance_level': safe_float(indicators.get('resistance', current_price * 1.05)),
             'primary_trend': signals['overall_signal'],
             'volume_trend': 'HIGH' if hist_data['Volume'].iloc[-1] > hist_data['Volume'].mean() else 'NORMAL',
             'source': 'Yahoo Finance API',
@@ -2839,10 +2990,17 @@ def get_technical_analysis():
         if not indicators:
             return jsonify({'error': 'Unable to calculate technical indicators'}), 500
         
-        current_price = float(hist_data['Close'].iloc[-1])
+        current_price = safe_float(hist_data['Close'].iloc[-1])
         
         # Generate comprehensive signals
         signals = generate_trading_signals(indicators, current_price)
+        
+        # Helper function to get indicator value
+        def get_indicator_value(indicator_name, default=None):
+            indicator = indicators.get(indicator_name)
+            if indicator is not None and not indicator.empty:
+                return safe_float(indicator.iloc[-1], default)
+            return default
         
         # Prepare technical analysis response
         response_data = {
@@ -2851,35 +3009,35 @@ def get_technical_analysis():
             'current_price': current_price,
             
             # Moving Averages
-            'sma_20': float(indicators.get('sma_20', [np.nan])[-1]) if len(indicators.get('sma_20', [])) > 0 else None,
-            'sma_50': float(indicators.get('sma_50', [np.nan])[-1]) if len(indicators.get('sma_50', [])) > 0 else None,
-            'ema_12': float(indicators.get('ema_12', [np.nan])[-1]) if len(indicators.get('ema_12', [])) > 0 else None,
-            'ema_26': float(indicators.get('ema_26', [np.nan])[-1]) if len(indicators.get('ema_26', [])) > 0 else None,
+            'sma_20': get_indicator_value('sma_20'),
+            'sma_50': get_indicator_value('sma_50'),
+            'ema_12': get_indicator_value('ema_12'),
+            'ema_26': get_indicator_value('ema_26'),
             
             # Momentum Indicators
-            'rsi': float(indicators.get('rsi', [np.nan])[-1]) if len(indicators.get('rsi', [])) > 0 else None,
-            'stoch_k': float(indicators.get('stoch_k', [np.nan])[-1]) if len(indicators.get('stoch_k', [])) > 0 else None,
-            'stoch_d': float(indicators.get('stoch_d', [np.nan])[-1]) if len(indicators.get('stoch_d', [])) > 0 else None,
-            'williams_r': float(indicators.get('williams_r', [np.nan])[-1]) if len(indicators.get('williams_r', [])) > 0 else None,
+            'rsi': get_indicator_value('rsi'),
+            'stoch_k': get_indicator_value('stoch_k'),
+            'stoch_d': get_indicator_value('stoch_d'),
+            'williams_r': get_indicator_value('williams_r'),
             
             # Trend Indicators
-            'macd': float(indicators.get('macd', [np.nan])[-1]) if len(indicators.get('macd', [])) > 0 else None,
-            'macd_signal': float(indicators.get('macd_signal', [np.nan])[-1]) if len(indicators.get('macd_signal', [])) > 0 else None,
-            'macd_histogram': float(indicators.get('macd_hist', [np.nan])[-1]) if len(indicators.get('macd_hist', [])) > 0 else None,
-            'adx': float(indicators.get('adx', [np.nan])[-1]) if len(indicators.get('adx', [])) > 0 else None,
+            'macd': get_indicator_value('macd'),
+            'macd_signal': get_indicator_value('macd_signal'),
+            'macd_histogram': get_indicator_value('macd_hist'),
+            'adx': get_indicator_value('adx'),
             
             # Volatility Indicators
-            'bb_upper': float(indicators.get('bb_upper', [np.nan])[-1]) if len(indicators.get('bb_upper', [])) > 0 else None,
-            'bb_middle': float(indicators.get('bb_middle', [np.nan])[-1]) if len(indicators.get('bb_middle', [])) > 0 else None,
-            'bb_lower': float(indicators.get('bb_lower', [np.nan])[-1]) if len(indicators.get('bb_lower', [])) > 0 else None,
-            'atr': float(indicators.get('atr', [np.nan])[-1]) if len(indicators.get('atr', [])) > 0 else None,
+            'bb_upper': get_indicator_value('bb_upper'),
+            'bb_middle': get_indicator_value('bb_middle'),
+            'bb_lower': get_indicator_value('bb_lower'),
+            'atr': get_indicator_value('atr'),
             
             # Volume Indicators
-            'obv': float(indicators.get('obv', [np.nan])[-1]) if len(indicators.get('obv', [])) > 0 else None,
+            'obv': get_indicator_value('obv'),
             
             # Support/Resistance
-            'support': float(indicators.get('support', current_price * 0.95)),
-            'resistance': float(indicators.get('resistance', current_price * 1.05)),
+            'support': safe_float(indicators.get('support', current_price * 0.95)),
+            'resistance': safe_float(indicators.get('resistance', current_price * 1.05)),
             
             # Trading Signals
             'signal': signals['overall_signal'],
@@ -2888,7 +3046,7 @@ def get_technical_analysis():
             
             # Analysis Summary
             'trend': 'BULLISH' if signals['overall_signal'] == 'BUY' else 'BEARISH' if signals['overall_signal'] == 'SELL' else 'SIDEWAYS',
-            'volatility': 'HIGH' if indicators.get('atr', [0])[-1] > hist_data['Close'].std() else 'NORMAL',
+            'volatility': 'HIGH' if get_indicator_value('atr', 0) > hist_data['Close'].std() else 'NORMAL',
             'volume_analysis': 'ABOVE_AVERAGE' if hist_data['Volume'].iloc[-1] > hist_data['Volume'].mean() else 'AVERAGE',
             
             'timestamp': datetime.now().isoformat()
@@ -3068,8 +3226,8 @@ def get_live_data():
         if hist.empty:
             return jsonify({'error': f'No live data available for {symbol}'}), 404
         
-        current_price = float(hist['Close'].iloc[-1])
-        prev_close = info.get('previousClose', current_price)
+        current_price = safe_float(hist['Close'].iloc[-1])
+        prev_close = safe_float(info.get('previousClose', current_price))
         
         response_data = {
             'success': True,
@@ -3078,9 +3236,9 @@ def get_live_data():
             'previous_close': prev_close,
             'price_change': current_price - prev_close,
             'change_percent': ((current_price - prev_close) / prev_close) * 100 if prev_close != 0 else 0,
-            'volume': int(hist['Volume'].iloc[-1]) if not pd.isna(hist['Volume'].iloc[-1]) else 0,
-            'day_high': float(hist['High'].max()),
-            'day_low': float(hist['Low'].min()),
+            'volume': int(safe_float(hist['Volume'].iloc[-1])),
+            'day_high': safe_float(hist['High'].max()),
+            'day_low': safe_float(hist['Low'].min()),
             'last_updated': datetime.now().isoformat(),
             'market_status': 'OPEN' if datetime.now().weekday() < 5 and 9 <= datetime.now().hour < 16 else 'CLOSED'
         }
@@ -3124,13 +3282,14 @@ def index():
         },
         'features': [
             'Real-time NSE/BSE data via Yahoo Finance',
-            'Comprehensive technical analysis with 15+ indicators',
+            'Custom technical analysis (no TA-Lib dependency)',
             'DeepSeek V3 AI integration via OpenRouter',
             'Professional trading signals and recommendations',
             'Rate limiting and error handling',
             'Support for 500+ Indian stocks and indices'
         ]
     })
+
 
 # --- Start App ---
 import os
